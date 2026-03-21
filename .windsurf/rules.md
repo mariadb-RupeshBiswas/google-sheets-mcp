@@ -29,6 +29,6 @@ get_cell, find_in_spreadsheet, batch_read_ranges
 gcloud auth login --enable-gdrive-access --update-adc
 → ~/.config/gcloud/application_default_credentials.json
 
-## Verified test sheet
-https://docs.google.com/spreadsheets/d/EXAMPLE_SPREADSHEET_ID
-Title: Example Spreadsheet | 8 tabs (Example Sheet 1–8) | 53 columns
+## Testing
+Unit tests: uv run pytest tests/ --ignore=tests/test_integration.py
+Integration tests: INTEGRATION=1 TEST_SPREADSHEET_ID=your_id uv run pytest tests/test_integration.py

@@ -4,9 +4,10 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock, patch
 
+import os
 import pytest
 
-SAMPLE_SPREADSHEET_ID = "EXAMPLE_SPREADSHEET_ID"
+SAMPLE_SPREADSHEET_ID = os.environ.get("TEST_SPREADSHEET_ID", "test_spreadsheet_id_placeholder")
 SAMPLE_SPREADSHEET_URL = (
     f"https://docs.google.com/spreadsheets/d/{SAMPLE_SPREADSHEET_ID}/edit?gid=0#gid=0"
 )

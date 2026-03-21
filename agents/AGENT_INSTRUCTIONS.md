@@ -94,8 +94,8 @@ When using `read_sheet`, `read_sheet_as_records`, or `get_cell`, pass the title
 
 ```json
 [
-  {"example_id": "OP-001", "example_name": "Deal A", "example_value_usd": "50000"},
-  {"example_id": "OP-002", "example_name": "Deal B", "example_value_usd": "75000"}
+  {"id": "001", "name": "Item A", "category": "TypeX", "value": "100"},
+  {"id": "002", "name": "Item B", "category": "TypeY", "value": "200"}
 ]
 ```
 
@@ -105,14 +105,14 @@ Missing cells in a row are returned as `null`.
 
 ```json
 {
-  "sheet_title": "Example Sheet 1",
-  "range_notation": "'Example Sheet 1'!A1:D3",
+  "sheet_title": "Sheet1",
+  "range_notation": "'Sheet1'!A1:D3",
   "row_count": 3,
   "column_count": 4,
   "values": [
-    ["example_id", "example_name", "opp_stage", "example_value_usd"],
-    ["OP-001", "Deal A", "Closed Won", "50000"],
-    ["OP-002", "Deal B", "Negotiation", "75000"]
+    ["id", "name", "category", "value"],
+    ["001", "Item A", "TypeX", "100"],
+    ["002", "Item B", "TypeY", "200"]
   ]
 }
 ```
@@ -125,11 +125,11 @@ simply omit trailing empty cells.
 ```json
 [
   {
-    "sheet_title": "Example Sheet 1",
+    "sheet_title": "Sheet1",
     "row": 1,
     "column": 1,
     "a1_notation": "A1",
-    "matched_value": "example_id"
+    "matched_value": "id"
   }
 ]
 ```
@@ -159,26 +159,15 @@ simply omit trailing empty cells.
 
 ---
 
-## Verified test spreadsheet
-
-```
-URL:   https://docs.google.com/spreadsheets/d/EXAMPLE_SPREADSHEET_ID/edit
-Title: Example Spreadsheet
-Tabs:  Example Sheet 1, Example Sheet 2, ..., Example Sheet 8
-Cols:  53 columns including example_id, example_name, example_value_usd, etc.
-```
-
----
-
 ## Example agent workflow
 
 ```
-User: "Show me the first 5 sales opportunities from Example Sheet 1"
+User: "Show me the first 5 rows from Sheet1"
 
 Agent:
 1. call read_sheet_as_records(
-     "https://docs.google.com/spreadsheets/d/EXAMPLE_SPREADSHEET_ID",
-     "Example Sheet 1",
+     "https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/edit",
+     "Sheet1",
      max_rows=5
    )
 2. Present the result as a formatted table

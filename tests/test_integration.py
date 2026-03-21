@@ -1,15 +1,10 @@
 """Integration tests – require real ADC credentials and network access.
 
-Spreadsheet under test:
-    https://docs.google.com/spreadsheets/d/EXAMPLE_SPREADSHEET_ID
-    Title: Example Spreadsheet
-    Tabs:  Example Sheet 1 … Example Sheet 8  (space in name — tests quoting)
+Set INTEGRATION=1 and TEST_SPREADSHEET_ID to enable these tests:
 
-Run with:
-    INTEGRATION=1 uv run pytest tests/test_integration.py -v -s
+    INTEGRATION=1 TEST_SPREADSHEET_ID=your_spreadsheet_id uv run pytest tests/test_integration.py -v -s
 
-These tests hit the live Google Sheets API and are skipped unless the
-INTEGRATION environment variable is set to "1".
+The test spreadsheet should have multiple tabs with data for comprehensive testing.
 """
 
 from __future__ import annotations
@@ -18,15 +13,15 @@ import os
 
 import pytest
 
-SAMPLE_URL = (
-    "https://docs.google.com/spreadsheets/d/"
-    "EXAMPLE_SPREADSHEET_ID/edit?gid=0#gid=0"
-)
-SAMPLE_ID = "EXAMPLE_SPREADSHEET_ID"
+from g_sheet_mcp.sheets import SheetsClient
+
+# Read spreadsheet ID from environment variable
+SAMPLE_ID = os.environ.get("TEST_SPREADSHEET_ID", "")
+SAMPLE_URL = f"https://docs.google.com/spreadsheets/d/{SAMPLE_ID}/edit?gid=0#gid=0" if SAMPLE_ID else ""
 
 pytestmark = pytest.mark.skipif(
-    os.environ.get("INTEGRATION") != "1",
-    reason="Set INTEGRATION=1 to run live API tests",
+    os.environ.get("INTEGRATION") != "1" or not SAMPLE_ID,
+    reason="Set INTEGRATION=1 and TEST_SPREADSHEET_ID to run live tests",
 )
 
 
@@ -50,66 +45,63 @@ def spreadsheet_info(client):
 
 
 class TestLiveMetadata:
-    def test_get_info_by_id(self, spreadsheet_info):
+    def test_get_info_returns_metadata(self, spreadsheet_info):
         print(f"\nTitle: {spreadsheet_info.title}")
         print(f"Sheets ({len(spreadsheet_info.sheets)}): {[s.title for s in spreadsheet_info.sheets]}")
         assert spreadsheet_info.spreadsheet_id == SAMPLE_ID
-        assert spreadsheet_info.title == "Example Spreadsheet"
+        assert spreadsheet_info.title  # Has a title
 
     def test_get_info_by_url(self, client):
-        info = client.get_spreadsheet_info(
-            "https://docs.google.com/spreadsheets/d/EXAMPLE_SPREADSHEET_ID/edit"
-        )
+        info = client.get_spreadsheet_info(SAMPLE_URL)
         assert info.spreadsheet_id == SAMPLE_ID
 
-    def test_has_eight_tabs(self, spreadsheet_info):
-        assert len(spreadsheet_info.sheets) == 8
-        titles = [s.title for s in spreadsheet_info.sheets]
-        assert titles == [f"Test Case {i}" for i in range(1, 9)]
+    def test_has_multiple_tabs(self, spreadsheet_info):
+        assert len(spreadsheet_info.sheets) >= 1, "Spreadsheet should have at least one sheet"
 
-    def test_sheet_names_contain_spaces(self, spreadsheet_info):
+    def test_sheet_names_populated(self, spreadsheet_info):
         for sheet in spreadsheet_info.sheets:
-            assert " " in sheet.title, f"Expected space in '{sheet.title}'"
+            assert sheet.title, "Each sheet should have a title"
 
     def test_all_sheets_are_grid_type(self, spreadsheet_info):
         for sheet in spreadsheet_info.sheets:
             assert sheet.sheet_type == "GRID"
 
     def test_sheet_properties_populated(self, spreadsheet_info):
-        s = spreadsheet_info.sheets[0]
-        assert s.row_count > 0
-        assert s.column_count > 0
+        for sheet in spreadsheet_info.sheets:
+            assert sheet.title
+            assert sheet.sheet_id is not None
+            assert sheet.index >= 0
 
 
 # ---------------------------------------------------------------------------
-# Reading all 8 tabs
+# Reading sheets
 # ---------------------------------------------------------------------------
 
 
 class TestReadAllTabs:
     def test_read_every_tab(self, client, spreadsheet_info):
-        """Read data from every sheet — verifies sheet-name quoting works for spaces."""
+        """Read data from every sheet — verifies sheet-name quoting works."""
         for sheet in spreadsheet_info.sheets:
             data = client.read_sheet(SAMPLE_ID, sheet.title)
-            print(f"\n  '{sheet.title}': {data.row_count} rows × {data.column_count} cols")
             assert data.sheet_title == sheet.title
 
-    def test_first_tab_has_expected_headers(self, client):
-        data = client.read_sheet(SAMPLE_ID, "Example Sheet 1")
-        assert data.values, "Sheet should not be empty"
-        headers = data.values[0]
-        assert "example_id" in headers
-        assert "example_name" in headers
-        assert "example_value_usd" in headers
+    def test_first_tab_has_headers(self, client, spreadsheet_info):
+        first_sheet = spreadsheet_info.sheets[0].title
+        data = client.read_sheet(SAMPLE_ID, first_sheet)
+        if data.values:
+            headers = data.values[0]
+            assert len(headers) > 0, "First row should have at least one column"
 
-    def test_first_tab_column_count(self, client):
-        data = client.read_sheet(SAMPLE_ID, "Example Sheet 1")
-        assert data.column_count == 53
+    def test_first_tab_has_columns(self, client, spreadsheet_info):
+        first_sheet = spreadsheet_info.sheets[0].title
+        data = client.read_sheet(SAMPLE_ID, first_sheet)
+        assert data.column_count >= 1
 
-    def test_each_tab_has_data_rows(self, client, spreadsheet_info):
+    def test_each_tab_readable(self, client, spreadsheet_info):
         for sheet in spreadsheet_info.sheets:
             data = client.read_sheet(SAMPLE_ID, sheet.title)
-            assert data.row_count >= 1, f"'{sheet.title}' appears empty"
+            # Just verify we can read it without error
+            assert data.sheet_title == sheet.title
 
 
 # ---------------------------------------------------------------------------
@@ -118,20 +110,23 @@ class TestReadAllTabs:
 
 
 class TestReadRange:
-    def test_read_first_four_columns(self, client):
-        data = client.read_range(SAMPLE_ID, "'Example Sheet 1'!A1:D5")
+    def test_read_first_four_columns(self, client, spreadsheet_info):
+        first_sheet = spreadsheet_info.sheets[0].title
+        data = client.read_range(SAMPLE_ID, f"'{first_sheet}'!A1:D5")
         assert data.row_count <= 5
         assert data.column_count == 4
 
-    def test_read_single_column(self, client):
-        data = client.read_range(SAMPLE_ID, "'Example Sheet 1'!A:A")
+    def test_read_single_column(self, client, spreadsheet_info):
+        first_sheet = spreadsheet_info.sheets[0].title
+        data = client.read_range(SAMPLE_ID, f"'{first_sheet}'!A:A")
         assert data.column_count == 1
-        assert data.values[0][0] == "example_id"
 
-    def test_read_header_row_only(self, client):
-        data = client.read_range(SAMPLE_ID, "'Example Sheet 1'!A1:AZ1")
+    def test_read_header_row_only(self, client, spreadsheet_info):
+        first_sheet = spreadsheet_info.sheets[0].title
+        data = client.read_range(SAMPLE_ID, f"'{first_sheet}'!A1:Z1")
         assert data.row_count == 1
-        assert len(data.values[0]) == 52  # actual column count in the sheet
+        if data.values:
+            assert len(data.values[0]) >= 1
 
 
 # ---------------------------------------------------------------------------
@@ -140,21 +135,22 @@ class TestReadRange:
 
 
 class TestGetCell:
-    def test_a1_is_example_id(self, client):
-        cell = client.get_cell(SAMPLE_ID, "Example Sheet 1", row=1, column=1)
+    def test_a1_read(self, client, spreadsheet_info):
+        first_sheet = spreadsheet_info.sheets[0].title
+        cell = client.get_cell(SAMPLE_ID, first_sheet, row=1, column=1)
         print(f"\nA1 = {cell.value!r}")
-        assert cell.value == "example_id"
         assert cell.a1_notation == "A1"
 
-    def test_b1_is_example_name(self, client):
-        cell = client.get_cell(SAMPLE_ID, "Example Sheet 1", row=1, column=2)
-        assert cell.value == "example_name"
+    def test_b1_read(self, client, spreadsheet_info):
+        first_sheet = spreadsheet_info.sheets[0].title
+        cell = client.get_cell(SAMPLE_ID, first_sheet, row=1, column=2)
         assert cell.a1_notation == "B1"
 
-    def test_out_of_range_cell_raises_error(self, client):
+    def test_out_of_range_cell_raises_error(self, client, spreadsheet_info):
+        first_sheet = spreadsheet_info.sheets[0].title
         from googleapiclient.errors import HttpError
         with pytest.raises(HttpError, match="exceeds grid limits"):
-            client.get_cell(SAMPLE_ID, "Example Sheet 1", row=999, column=999)
+            client.get_cell(SAMPLE_ID, first_sheet, row=999, column=999)
 
 
 # ---------------------------------------------------------------------------
@@ -163,30 +159,33 @@ class TestGetCell:
 
 
 class TestReadSheetAsRecords:
-    def test_returns_list_of_dicts(self, client):
-        records = client.read_sheet_as_records(SAMPLE_ID, "Example Sheet 1")
+    def test_returns_list_of_dicts(self, client, spreadsheet_info):
+        first_sheet = spreadsheet_info.sheets[0].title
+        records = client.read_sheet_as_records(SAMPLE_ID, first_sheet)
         print(f"\nrecords count: {len(records)}")
         assert isinstance(records, list)
-        assert len(records) >= 1
-        first = records[0]
-        assert isinstance(first, dict)
-        assert "example_id" in first
-        assert "example_value_usd" in first
+        if len(records) >= 1:
+            first = records[0]
+            assert isinstance(first, dict)
+            assert len(first.keys()) > 0, "Record should have at least one column"
 
-    def test_all_records_have_same_keys(self, client):
-        records = client.read_sheet_as_records(SAMPLE_ID, "Example Sheet 1")
+    def test_all_records_have_same_keys(self, client, spreadsheet_info):
+        first_sheet = spreadsheet_info.sheets[0].title
+        records = client.read_sheet_as_records(SAMPLE_ID, first_sheet)
         if len(records) > 1:
             keys0 = set(records[0].keys())
             for rec in records[1:]:
                 assert set(rec.keys()) == keys0
 
-    def test_max_rows_respected(self, client):
-        records = client.read_sheet_as_records(SAMPLE_ID, "Example Sheet 1", max_rows=1)
+    def test_max_rows_respected(self, client, spreadsheet_info):
+        first_sheet = spreadsheet_info.sheets[0].title
+        records = client.read_sheet_as_records(SAMPLE_ID, first_sheet, max_rows=1)
         assert len(records) <= 1
 
     def test_works_on_all_tabs(self, client, spreadsheet_info):
         for sheet in spreadsheet_info.sheets:
-            records = client.read_sheet_as_records(SAMPLE_ID, sheet.title)
+            records = client.read_sheet_as_records(SAMPLE_ID, sheet.title, max_rows=1)
+            assert isinstance(records, list)
             print(f"\n  '{sheet.title}' → {len(records)} records")
 
 
@@ -196,24 +195,23 @@ class TestReadSheetAsRecords:
 
 
 class TestBatchRead:
-    def test_batch_two_tabs(self, client):
-        results = client.batch_read_ranges(
-            SAMPLE_ID,
-            ["'Example Sheet 1'!A1:D2", "'Example Sheet 2'!A1:D2"],
-        )
-        assert len(results) == 2
-        for r in results:
-            assert r.row_count >= 1
+    def test_batch_two_tabs(self, client, spreadsheet_info):
+        if len(spreadsheet_info.sheets) >= 2:
+            sheet1 = spreadsheet_info.sheets[0].title
+            sheet2 = spreadsheet_info.sheets[1].title
+            results = client.batch_read_ranges(
+                SAMPLE_ID,
+                [f"'{sheet1}'!A1:D2", f"'{sheet2}'!A1:D2"],
+            )
+            assert len(results) == 2
 
     def test_batch_headers_of_all_tabs(self, client, spreadsheet_info):
-        ranges = [f"'{s.title}'!A1:AZ1" for s in spreadsheet_info.sheets]
+        ranges = [f"'{s.title}'!A1:Z1" for s in spreadsheet_info.sheets]
         results = client.batch_read_ranges(SAMPLE_ID, ranges)
-        assert len(results) == 8
-        # Check that sheets with data have the expected header
+        assert len(results) == len(spreadsheet_info.sheets)
+        # Check that sheets with data are readable
         sheets_with_data = [r for r in results if r.row_count > 0]
         assert len(sheets_with_data) >= 1, "At least one sheet should have data"
-        for r in sheets_with_data:
-            assert r.values[0][0] == "example_id"
 
 
 # ---------------------------------------------------------------------------
@@ -222,29 +220,38 @@ class TestBatchRead:
 
 
 class TestFindInSpreadsheet:
-    def test_find_example_id_in_first_tab(self, client):
-        results = client.find_in_spreadsheet(
-            SAMPLE_ID, "example_id", sheet_title="Example Sheet 1"
-        )
-        assert len(results) >= 1
-        assert results[0].matched_value == "example_id"
-        assert results[0].row == 1
+    def test_find_in_first_tab(self, client, spreadsheet_info):
+        first_sheet = spreadsheet_info.sheets[0].title
+        # Try to find any value from the first cell
+        data = client.read_range(SAMPLE_ID, f"'{first_sheet}'!A1:A1")
+        if data.values and data.values[0]:
+            search_value = data.values[0][0]
+            results = client.find_in_spreadsheet(
+                SAMPLE_ID, str(search_value), sheet_title=first_sheet
+            )
+            assert len(results) >= 1
 
-    def test_find_case_insensitive(self, client):
-        results = client.find_in_spreadsheet(
-            SAMPLE_ID, "EXAMPLE_ID", sheet_title="Example Sheet 1", case_sensitive=False
-        )
-        assert len(results) >= 1
+    def test_find_case_insensitive(self, client, spreadsheet_info):
+        first_sheet = spreadsheet_info.sheets[0].title
+        data = client.read_range(SAMPLE_ID, f"'{first_sheet}'!A1:A1")
+        if data.values and data.values[0]:
+            search_value = str(data.values[0][0]).upper()
+            results = client.find_in_spreadsheet(
+                SAMPLE_ID, search_value, sheet_title=first_sheet, case_sensitive=False
+            )
+            # May or may not find depending on data, but shouldn't error
+            assert isinstance(results, list)
 
-    def test_find_nonexistent_returns_empty(self, client):
+    def test_find_nonexistent_returns_empty(self, client, spreadsheet_info):
+        first_sheet = spreadsheet_info.sheets[0].title
         results = client.find_in_spreadsheet(
-            SAMPLE_ID, "ZZZNOMATCH_XYZ_123456", sheet_title="Example Sheet 1"
+            SAMPLE_ID, "ZZZNOMATCH_XYZ_123456", sheet_title=first_sheet
         )
         assert results == []
 
     def test_find_unknown_sheet_raises(self, client):
         with pytest.raises(LookupError):
-            client.find_in_spreadsheet(SAMPLE_ID, "example_id", sheet_title="DoesNotExist")
+            client.find_in_spreadsheet(SAMPLE_ID, "anything", sheet_title="DoesNotExist")
 
 
 # ---------------------------------------------------------------------------

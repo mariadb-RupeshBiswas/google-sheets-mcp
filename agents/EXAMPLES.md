@@ -13,68 +13,63 @@ Real examples of how an agent should use the google-sheets MCP tools.
 ```python
 # Step 1: discover the spreadsheet
 info = get_spreadsheet_info("https://docs.google.com/spreadsheets/d/EXAMPLE_SPREADSHEET_ID/edit")
-# → title: "Example Spreadsheet", tabs: ["Example Sheet 1", ..., "Example Sheet 8"]
+# → title: "My Data", tabs: ["Sheet1", "Sheet2", "Sheet3"]
 
 # Step 2: read the first tab as records
 records = read_sheet_as_records(
     "https://docs.google.com/spreadsheets/d/EXAMPLE_SPREADSHEET_ID/edit",
-    "Example Sheet 1",
+    "Sheet1",
     max_rows=5
 )
-# → [{"example_id": "OP-001", "example_name": "Deal A", ...}, ...]
+# → [{"id": "001", "name": "Item A", "value": "100"}, ...]
 ```
 
-**Agent response:** "This spreadsheet is called 'Example Spreadsheet' and has 8 tabs (Example Sheet 1–8). Each tab has 53 columns including example_id, example_name, opp_stage, example_value_usd, and more sales opportunity data."
+**Agent response:** "This spreadsheet is called 'My Data' and has 3 tabs. Sheet1 contains records with columns like id, name, and value."
 
 ---
 
 ## Example 2: Read a specific range
 
-**User:** "Show me columns A to D from Example Sheet 2"
+**User:** "Show me columns A to D from Sheet2"
 
 ```python
 data = read_range(
-    "EXAMPLE_SPREADSHEET_ID",
-    "'Example Sheet 2'!A1:D10"
+    "YOUR_SPREADSHEET_ID",
+    "'Sheet2'!A1:D10"
 )
-# → values: [["example_id", "example_name", "opp_type", "opp_stage"], ["OP-001", ...], ...]
+# → values: [["id", "name", "category", "status"], ["001", "Item A", "Type1", "Active"], ...]
 ```
 
 ---
 
 ## Example 3: Search for a value
 
-**User:** "Find all cells containing 'Closed Won' in Example Sheet 1"
+**User:** "Find all cells containing 'Complete' in Sheet1"
 
 ```python
 results = find_in_spreadsheet(
-    "EXAMPLE_SPREADSHEET_ID",
-    "Closed Won",
-    sheet_title="Example Sheet 1",
+    "YOUR_SPREADSHEET_ID",
+    "Complete",
+    sheet_title="Sheet1",
     case_sensitive=False
 )
-# → [{"sheet_title": "Example Sheet 1", "row": 2, "column": 4, "a1_notation": "D2", "matched_value": "Closed Won"}]
+# → [{"sheet_title": "Sheet1", "row": 2, "column": 4, "a1_notation": "D2", "matched_value": "Complete"}]
 ```
 
 ---
 
-## Example 4: Read headers from all 8 tabs efficiently
+## Example 4: Read headers from multiple tabs efficiently
 
-**User:** "Do all 8 test case tabs have the same column headers?"
+**User:** "Do all my sheets have the same column headers?"
 
 ```python
-# One batch call instead of 8 separate calls
+# One batch call instead of multiple separate calls
 results = batch_read_ranges(
-    "EXAMPLE_SPREADSHEET_ID",
+    "YOUR_SPREADSHEET_ID",
     [
-        "'Example Sheet 1'!A1:AZ1",
-        "'Example Sheet 2'!A1:AZ1",
-        "'Example Sheet 3'!A1:AZ1",
-        "'Example Sheet 4'!A1:AZ1",
-        "'Example Sheet 5'!A1:AZ1",
-        "'Example Sheet 6'!A1:AZ1",
-        "'Example Sheet 7'!A1:AZ1",
-        "'Example Sheet 8'!A1:AZ1",
+        "'Sheet1'!A1:Z1",
+        "'Sheet2'!A1:Z1",
+        "'Sheet3'!A1:Z1",
     ]
 )
 # Compare results[0].values[0] == results[1].values[0] == ... etc
@@ -84,16 +79,16 @@ results = batch_read_ranges(
 
 ## Example 5: Get a specific cell
 
-**User:** "What is the value in row 2 column 3 of Example Sheet 1?"
+**User:** "What is the value in row 2 column 3 of Sheet1?"
 
 ```python
 cell = get_cell(
-    "EXAMPLE_SPREADSHEET_ID",
-    "Example Sheet 1",
+    "YOUR_SPREADSHEET_ID",
+    "Sheet1",
     row=2,
     column=3
 )
-# → {"row": 2, "column": 3, "a1_notation": "C2", "value": "New Business"}
+# → {"row": 2, "column": 3, "a1_notation": "C2", "value": "Category A"}
 ```
 
 ---
@@ -104,13 +99,13 @@ cell = get_cell(
 
 ```python
 cell = get_cell(
-    "EXAMPLE_SPREADSHEET_ID",
-    "Example Sheet 1",
+    "YOUR_SPREADSHEET_ID",
+    "Sheet1",
     row=2,
     column=5,
     value_render_option="FORMULA"
 )
-# → {"value": "=IF(D2=\"Closed Won\",B2*0.9,B2)"}
+# → {"value": "=IF(D2=\"Complete\",B2*0.9,B2)"}
 ```
 
 ---
@@ -126,7 +121,7 @@ try:
 except LookupError:
     # Fall back: show available tabs
     sheets = list_sheets(spreadsheet_id)
-    # → "I couldn't find a 'Summary' tab. Available tabs are: Example Sheet 1, ..., Example Sheet 8"
+    # → "I couldn't find a 'Summary' tab. Available tabs are: Sheet1, Sheet2, Sheet3"
 ```
 
 ---
@@ -143,10 +138,10 @@ info = get_spreadsheet_info(url)
 records = read_sheet_as_records(url, info.sheets[0].title)
 
 # 3. Filter in-memory (Python/agent logic)
-closed_won = [r for r in records if r.get("opp_stage") == "Closed Won"]
+completed = [r for r in records if r.get("status") == "Complete"]
 
 # 4. Present
-"Found 3 Closed Won opportunities: ..."
+"Found 3 completed items: ..."
 ```
 
 ### Pattern: Multi-tab summary

@@ -66,8 +66,15 @@ dmypy.json
 application_default_credentials.json
 service_account*.json
 credentials*.json
+
+# Environment files with test config
 .env
-.env.*
+.env.local
+.env.test
+.env.*.local
+!.env.example
+
+# Private keys
 *.pem
 *.key
 *_key.json
