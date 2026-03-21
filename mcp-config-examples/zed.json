@@ -1,0 +1,15 @@
+{
+  "context_servers": {
+    "google-sheets": {
+      "command": {
+        "path": "uv",
+        "args": [
+          "--directory",
+          "/absolute/path/to/g_sheet_mcp",
+          "run",
+          "g-sheet-mcp"
+        ]
+      }
+    }
+  }
+}
