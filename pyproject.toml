@@ -5,7 +5,10 @@ description = "A Model Context Protocol (MCP) server for reading Google Sheets u
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
-keywords = ["mcp", "google-sheets", "llm", "ai"]
+authors = [
+    { name = "Your Name", email = "your.email@example.com" }
+]
+keywords = ["mcp", "google-sheets", "llm", "ai", "anthropic", "claude"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -13,6 +16,8 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP",
 ]
 dependencies = [
     "mcp[cli]>=1.9.0",

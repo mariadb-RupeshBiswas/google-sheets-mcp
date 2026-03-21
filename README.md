@@ -26,9 +26,9 @@ Sheet names with **spaces** (e.g. `Example Sheet 1`) are quoted automatically.
 
 ---
 
-## Quick Start
+## Installation
 
-### 1. Prerequisites
+### Prerequisites
 
 ```bash
 # Python 3.11+ and uv
@@ -40,13 +40,35 @@ brew install google-cloud-sdk
 # or: https://cloud.google.com/sdk/docs/install
 ```
 
-### 2. Clone and install
+### Option 1: Local Clone (Recommended for Development)
 
 ```bash
 git clone https://github.com/yourusername/g_sheet_mcp.git
 cd g_sheet_mcp
 uv sync
 ```
+
+### Option 2: Run with uvx (No Installation Required)
+
+```bash
+# From GitHub (no clone needed)
+uvx --from git+https://github.com/yourusername/g_sheet_mcp g-sheet-mcp
+
+# From local path
+uvx --from /absolute/path/to/g_sheet_mcp g-sheet-mcp
+```
+
+### Option 3: Install from PyPI (After Publishing)
+
+```bash
+# With pipx (persistent)
+pipx install g-sheet-mcp
+
+# Or just use uvx (ephemeral)
+uvx g-sheet-mcp
+```
+
+See **[docs/PUBLISHING.md](docs/PUBLISHING.md)** for PyPI publishing guide (optional).
 
 ### 3. Authenticate (once)
 
@@ -67,9 +89,20 @@ uv run g-sheet-mcp --debug  # verbose logging
 
 ---
 
+## Documentation
+
+- **[Quick Start](docs/QUICKSTART.md)** — 5-minute setup
+- **[Editor Setup](docs/EDITOR_SETUP.md)** — Windsurf, Cursor, Claude Desktop, VS Code, Zed, Claude Code
+- **[Authentication](docs/AUTH.md)** — ADC setup and troubleshooting
+- **[Troubleshooting](docs/TROUBLESHOOTING.md)** — Common issues and fixes
+- **[Publishing](docs/PUBLISHING.md)** — PyPI publishing guide (optional)
+- **[Contributing](CONTRIBUTING.md)** — Development guide
+
+---
+
 ## Editor Integration
 
-> Full step-by-step guides with screenshots → **[docs/EDITOR_SETUP.md](docs/EDITOR_SETUP.md)**
+> Full step-by-step guides → **[docs/EDITOR_SETUP.md](docs/EDITOR_SETUP.md)**
 
 Quick JSON snippets for each editor — replace `/absolute/path/to/g_sheet_mcp`:
 
