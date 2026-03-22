@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 ### Added
+- `.github/workflows/ci.yml` — GitHub Actions checks for lint, mypy, and unit tests
+- `.github/workflows/publish.yml` — trusted PyPI publishing workflow using `uv publish`
 - `read_sheet_as_records` tool: returns rows as `[{header: value}]` dicts — LLM-friendly format
 - Auto-auth flow in `auth.py`: triggers `gcloud auth login` if no ADC file found
 - `credentials_exist()` and `ensure_authenticated()` helpers in auth module
@@ -25,6 +27,11 @@
 - `LICENSE` — MIT license
 
 ### Changed
+- Public docs/config updated for the `mariadb-RupeshBiswas/google-sheets-mcp` repository and all three run modes (local clone, GitHub, local path / PyPI with `uvx`)
+- VS Code tasks now use emoji labels with short, task-specific descriptions
+- `uv.lock` is now tracked for reproducible public builds
+- Agent/rules/security docs now explicitly require sanitized public examples and no customer/internal sample data
+- FastMCP server identity aligned to `google-sheets` and documents the metadata resource
 - `_raise_friendly` return type fixed to `-> NoReturn`
 - `read_sheet` now uses `_quote_sheet()` for correct A1 range notation
 - `get_cell` now uses `_quote_sheet()` and validates row/column >= 1

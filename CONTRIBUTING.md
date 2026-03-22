@@ -8,8 +8,8 @@ Thank you for considering a contribution! This guide will help you get started.
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/g_sheet_mcp.git
-cd g_sheet_mcp
+git clone https://github.com/mariadb-RupeshBiswas/google-sheets-mcp.git
+cd google-sheets-mcp
 
 # Install all dependencies including dev extras
 uv sync --extra dev
@@ -32,10 +32,10 @@ uv run pytest --cov=src/g_sheet_mcp --cov-report=term-missing
 # Integration tests (requires auth + test spreadsheet)
 cp .env.example .env
 # Edit .env and add your TEST_SPREADSHEET_ID
-INTEGRATION=1 TEST_SPREADSHEET_ID=your_id uv run pytest tests/test_integration.py -v
+INTEGRATION=1 TEST_SPREADSHEET_ID=your_test_spreadsheet_id uv run pytest tests/test_integration.py -v
 
 # All tests
-INTEGRATION=1 TEST_SPREADSHEET_ID=your_id uv run pytest
+INTEGRATION=1 TEST_SPREADSHEET_ID=your_test_spreadsheet_id uv run pytest
 ```
 
 ---
@@ -53,6 +53,9 @@ uv run ruff check --fix src/ tests/
 
 # Type checking
 uv run mypy src/
+
+# Refresh the lockfile if dependencies change
+uv lock
 ```
 
 ### Pre-commit Checks
@@ -62,13 +65,14 @@ Before submitting a PR, ensure:
 - ✅ No linting errors
 - ✅ Type hints are correct
 - ✅ New code has test coverage
+- ✅ Public examples stay sanitized (no real sheet IDs, emails, or customer/internal data)
 
 ---
 
 ## Project Structure
 
 ```
-g_sheet_mcp/
+google-sheets-mcp/
 ├── src/g_sheet_mcp/
 │   ├── __init__.py       # Package version
 │   ├── auth.py           # ADC authentication
@@ -119,6 +123,7 @@ def test_your_new_feature(client):
 - Update `README.md` if adding user-facing features
 - Update `CHANGELOG.md` with your changes
 - Add examples to `agents/EXAMPLES.md` if relevant
+- Keep all examples generic and safe for a public repository
 
 ### 5. Commit with Conventional Commits
 
@@ -287,7 +292,7 @@ Use GitHub issues with the `enhancement` label.
 ## Questions?
 
 - Check the [documentation](docs/)
-- Search existing [GitHub issues](https://github.com/yourusername/g_sheet_mcp/issues)
+- Search existing [GitHub issues](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/issues)
 - Open a new issue for discussion
 
 ---

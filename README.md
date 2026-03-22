@@ -1,14 +1,19 @@
-# g-sheet-mcp
+# 📄 Google Sheets MCP
 
-A **read-only** [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that gives
-AI assistants (Claude, Cursor, Copilot, etc.) direct access to Google Sheets data — authenticated
-via [Application Default Credentials (ADC)](https://cloud.google.com/docs/authentication/application-default-credentials).
+`g-sheet-mcp` is a **read-only** [Model Context Protocol (MCP)](https://modelcontextprotocol.io)
+server that gives AI assistants (Claude, Cursor, Copilot, Cascade, and other MCP clients)
+direct access to Google Sheets data — authenticated via
+[Application Default Credentials (ADC)](https://cloud.google.com/docs/authentication/application-default-credentials).
 
 No service account JSON.  No hardcoded secrets.  One command to authenticate, works everywhere.
 
+Repo: `google-sheets-mcp`  ·  CLI/package: `g-sheet-mcp`  ·  Python import: `g_sheet_mcp`
+
+All examples in this repo are generic and sanitized for public release.
+
 ---
 
-## Features
+## ✨ Features
 
 | MCP Tool | Description |
 |---|---|
@@ -26,7 +31,7 @@ Sheet names with **spaces** (e.g. `Example Sheet 1`) are quoted automatically.
 
 ---
 
-## Installation
+## 🚀 Installation
 
 ### Prerequisites
 
@@ -40,37 +45,38 @@ brew install google-cloud-sdk
 # or: https://cloud.google.com/sdk/docs/install
 ```
 
-### Option 1: Local Clone (Recommended for Development)
+### Mode 1: Local clone (`uv sync`)
 
 ```bash
-git clone <your-repo-url>
-cd g_sheet_mcp
+git clone https://github.com/mariadb-RupeshBiswas/google-sheets-mcp.git
+cd google-sheets-mcp
 uv sync
 ```
 
-### Option 2: Run with uvx (No Installation Required)
+### Mode 2: GitHub (`uvx --from git+...`)
 
 ```bash
-# From GitHub (no clone needed)
-uvx --from git+https://github.com/<your-user-or-org>/<repo> g-sheet-mcp
-
-# From local path
-uvx --from /absolute/path/to/g_sheet_mcp g-sheet-mcp
+uvx --from git+https://github.com/mariadb-RupeshBiswas/google-sheets-mcp g-sheet-mcp
 ```
 
-### Option 3: Install from PyPI (After Publishing)
+### Mode 3: Local path (`uvx --from /absolute/path/...`)
 
 ```bash
-# With pipx (persistent)
-pipx install g-sheet-mcp
+uvx --from /absolute/path/to/google-sheets-mcp g-sheet-mcp
+```
 
-# Or just use uvx (ephemeral)
+### Mode 4: PyPI (`uvx g-sheet-mcp`) — after publishing
+
+```bash
 uvx g-sheet-mcp
+
+# Optional persistent install
+pipx install g-sheet-mcp
 ```
 
 See **[docs/PUBLISHING.md](docs/PUBLISHING.md)** for PyPI publishing guide (optional).
 
-### 3. Authenticate (once)
+### Step 2 — Authenticate (once)
 
 ```bash
 gcloud auth login --enable-gdrive-access --update-adc
@@ -79,7 +85,7 @@ gcloud auth login --enable-gdrive-access --update-adc
 This writes `~/.config/gcloud/application_default_credentials.json`.  The server picks it up
 automatically on every subsequent run — including auto-detection if it is missing.
 
-### 4. Run the server
+### Step 3 — Run the server
 
 ```bash
 uv run g-sheet-mcp          # stdio mode (for MCP clients)
@@ -89,22 +95,24 @@ uv run g-sheet-mcp --debug  # verbose logging
 
 ---
 
-## Documentation
+## 📚 Documentation
 
 - **[Quick Start](docs/QUICKSTART.md)** — 5-minute setup
 - **[Editor Setup](docs/EDITOR_SETUP.md)** — Windsurf, Cursor, Claude Desktop, VS Code, Zed, Claude Code
 - **[Authentication](docs/AUTH.md)** — ADC setup and troubleshooting
 - **[Troubleshooting](docs/TROUBLESHOOTING.md)** — Common issues and fixes
+- **[Security](SECURITY.md)** — Security model, public-repo hygiene, and reporting policy
 - **[Publishing](docs/PUBLISHING.md)** — PyPI publishing guide (optional)
 - **[Contributing](CONTRIBUTING.md)** — Development guide
 
 ---
 
-## Editor Integration
+## 🧩 Editor Integration
 
 > Full step-by-step guides → **[docs/EDITOR_SETUP.md](docs/EDITOR_SETUP.md)**
 
-Quick JSON snippets for each editor — replace `/absolute/path/to/g_sheet_mcp`:
+Quick JSON snippets for each editor — replace `/absolute/path/to/google-sheets-mcp`.
+GitHub and PyPI / `uvx` variants for every editor are in **[docs/EDITOR_SETUP.md](docs/EDITOR_SETUP.md)**.
 
 ### Windsurf — `~/.codeium/windsurf/mcp_config.json`
 
@@ -113,7 +121,7 @@ Quick JSON snippets for each editor — replace `/absolute/path/to/g_sheet_mcp`:
   "mcpServers": {
     "google-sheets": {
       "command": "uv",
-      "args": ["--directory", "/absolute/path/to/g_sheet_mcp", "run", "g-sheet-mcp"]
+      "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
     }
   }
 }
@@ -126,7 +134,7 @@ Quick JSON snippets for each editor — replace `/absolute/path/to/g_sheet_mcp`:
   "mcpServers": {
     "google-sheets": {
       "command": "uv",
-      "args": ["--directory", "/absolute/path/to/g_sheet_mcp", "run", "g-sheet-mcp"]
+      "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
     }
   }
 }
@@ -141,7 +149,7 @@ Quick JSON snippets for each editor — replace `/absolute/path/to/g_sheet_mcp`:
   "mcpServers": {
     "google-sheets": {
       "command": "uv",
-      "args": ["run", "--directory", "/absolute/path/to/g_sheet_mcp", "g-sheet-mcp"]
+      "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
     }
   }
 }
@@ -155,7 +163,7 @@ Quick JSON snippets for each editor — replace `/absolute/path/to/g_sheet_mcp`:
     "google-sheets": {
       "type": "stdio",
       "command": "uv",
-      "args": ["--directory", "/absolute/path/to/g_sheet_mcp", "run", "g-sheet-mcp"]
+      "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
     }
   }
 }
@@ -169,7 +177,7 @@ Quick JSON snippets for each editor — replace `/absolute/path/to/g_sheet_mcp`:
     "google-sheets": {
       "command": {
         "path": "uv",
-        "args": ["--directory", "/absolute/path/to/g_sheet_mcp", "run", "g-sheet-mcp"]
+        "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
       }
     }
   }
@@ -180,7 +188,7 @@ Quick JSON snippets for each editor — replace `/absolute/path/to/g_sheet_mcp`:
 
 ```bash
 claude mcp add --transport stdio google-sheets -- \
-  uv run --directory /absolute/path/to/g_sheet_mcp g-sheet-mcp
+  uv --directory /absolute/path/to/google-sheets-mcp run g-sheet-mcp
 ```
 
 ---
@@ -207,7 +215,7 @@ Read columns A through D from every tab in that spreadsheet
 
 ---
 
-## Available MCP Tools — Reference
+## 🧰 Available MCP Tools — Reference
 
 ### `get_spreadsheet_info`
 ```
@@ -276,13 +284,14 @@ value_render_option: str
 
 ---
 
-## Development
+## 🛠 Development
 
 ```bash
 uv sync --extra dev              # install with dev deps
+uv lock                          # refresh lockfile if dependencies change
 
-uv run pytest tests/ --ignore=tests/test_integration.py       # unit tests (71 tests)
-INTEGRATION=1 TEST_SPREADSHEET_ID=your_id uv run pytest tests/test_integration.py -v -s
+uv run pytest tests/ --ignore=tests/test_integration.py       # unit tests (74 tests)
+INTEGRATION=1 TEST_SPREADSHEET_ID=your_test_spreadsheet_id uv run pytest tests/test_integration.py -v -s
 
 uv run ruff check src tests      # lint
 uv run mypy src                  # type check
@@ -292,7 +301,7 @@ uv run mcp dev src/g_sheet_mcp/server.py   # MCP Inspector (interactive)
 
 ---
 
-## Authentication
+## 🔐 Authentication
 
 ```
 gcloud auth login --enable-gdrive-access --update-adc
@@ -308,10 +317,10 @@ Full details → **[docs/AUTH.md](docs/AUTH.md)**
 
 ---
 
-## Project structure
+## 🗂 Project structure
 
 ```
-g_sheet_mcp/
+google-sheets-mcp/
 ├── src/g_sheet_mcp/
 │   ├── auth.py        # ADC credential loading + auto-auth flow
 │   ├── models.py      # Pydantic models for all API responses
@@ -335,7 +344,7 @@ g_sheet_mcp/
 
 ---
 
-## Troubleshooting
+## 🧯 Troubleshooting
 
 | Error | Fix |
 |---|---|
@@ -350,6 +359,6 @@ Full guide → **[docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)**
 
 ---
 
-## License
+## 📄 License
 
 MIT — see [LICENSE](LICENSE)

@@ -1,200 +1,179 @@
-# Publishing to PyPI (Optional)
+# 📦 Publishing to PyPI (Optional)
 
-Publishing to PyPI enables simpler installation via `pip` or `uvx`. However, **this is completely optional** — the project works perfectly fine from a local clone or git URL.
+Publishing to PyPI enables the simplest install path:
+
+```bash
+uvx g-sheet-mcp
+```
+
+This is optional. The project already works from:
+
+- a local clone with `uv sync` + `uv run`
+- GitHub with `uvx --from git+https://github.com/mariadb-RupeshBiswas/google-sheets-mcp`
+- a local path with `uvx --from /absolute/path/to/google-sheets-mcp`
 
 ---
 
-## Before Publishing
+## Before publishing
 
-### 1. Update project metadata
+### 1. Confirm project metadata
 
-Edit `pyproject.toml`:
+The package metadata already points to the public repo:
 
-```toml
-[project]
-name = "g-sheet-mcp"
-version = "0.1.0"  # Increment for each release
+- Repository: `https://github.com/mariadb-RupeshBiswas/google-sheets-mcp`
+- Package name: `g-sheet-mcp`
+- CLI entry point: `g-sheet-mcp`
 
-[project.urls]
-Homepage = "https://github.com/yourusername/g_sheet_mcp"  # Update username
-"Bug Tracker" = "https://github.com/yourusername/g_sheet_mcp/issues"
-```
+When cutting a release, update both version locations:
 
-### 2. Verify package builds
+- `pyproject.toml`
+- `src/g_sheet_mcp/__init__.py`
+
+### 2. Refresh the lockfile and build artifacts
 
 ```bash
+uv lock
 uv build
-# Creates dist/g_sheet_mcp-0.1.0.tar.gz and dist/g_sheet_mcp-0.1.0-py3-none-any.whl
 ```
 
-### 3. Test the built package
+### 3. Smoke-test the built package
 
 ```bash
-# Install from local wheel
-pip install dist/g_sheet_mcp-0.1.0-py3-none-any.whl
+uvx --from dist/*.whl g-sheet-mcp --help
+```
 
-# Test it works
-g-sheet-mcp --help
+### 4. Run the release checks
+
+```bash
+uv run ruff check src tests
+uv run mypy src
+uv run pytest tests/ --ignore=tests/test_integration.py -q
 ```
 
 ---
 
-## Publishing to PyPI
+## Option A — Manual publish with `uv`
 
-### First-time setup
-
-```bash
-# Install twine
-pip install twine
-
-# Create PyPI account at https://pypi.org/account/register/
-# Generate API token at https://pypi.org/manage/account/token/
-```
-
-### Configure credentials
+Create a PyPI project for `g-sheet-mcp`, then publish with an API token:
 
 ```bash
-# Create/edit ~/.pypirc
-cat > ~/.pypirc << 'EOF'
-[pypi]
-username = __token__
-password = pypi-YOUR_TOKEN_HERE
-EOF
-
-chmod 600 ~/.pypirc
-```
-
-### Upload to PyPI
-
-```bash
-# Build fresh
+export UV_PUBLISH_TOKEN=pypi-...
 uv build
-
-# Upload to PyPI
-twine upload dist/*
+uv publish
 ```
 
-### Test installation
+Notes:
 
-```bash
-# In a fresh environment
-pip install g-sheet-mcp
-
-# Or with uvx
-uvx g-sheet-mcp --help
-```
+- Use an environment variable or keyring-backed auth — do not hardcode tokens in repo files
+- `uv publish --dry-run` is useful before the real upload
 
 ---
 
-## Alternative: Publish to TestPyPI First
+## Option B — Trusted publishing via GitHub Actions (recommended)
 
-Test the full workflow without polluting the real PyPI:
+This repo can publish without storing a PyPI token if you configure PyPI trusted publishing.
 
-```bash
-# Upload to TestPyPI
-twine upload --repository testpypi dist/*
+### PyPI setup
 
-# Test install
-pip install --index-url https://test.pypi.org/simple/ g-sheet-mcp
-```
+1. Create the `g-sheet-mcp` project on PyPI
+2. In PyPI, add a **Trusted Publisher** for:
+   - **Owner:** `mariadb-RupeshBiswas`
+   - **Repository:** `google-sheets-mcp`
+   - **Workflow:** `publish.yml`
+3. Push a version tag such as `v0.1.0`
+
+The matching workflow can live at `.github/workflows/publish.yml` and publish with `uv publish --trusted-publishing=always`.
 
 ---
 
-## Versioning Strategy
+## GitHub release flow
+
+1. Update `CHANGELOG.md`
+2. Bump `version` in `pyproject.toml` and `src/g_sheet_mcp/__init__.py`
+3. Run:
+
+```bash
+uv lock
+uv build
+uv run ruff check src tests
+uv run mypy src
+uv run pytest tests/ --ignore=tests/test_integration.py -q
+```
+
+4. Commit the release changes
+5. Create a tag:
+
+```bash
+git tag v0.1.0
+```
+
+6. Push commits and tags:
+
+```bash
+git push origin main --tags
+```
+
+7. Publish manually with `uv publish` or let GitHub Actions handle it
+
+---
+
+## Versioning strategy
 
 Follow [Semantic Versioning](https://semver.org/):
 
-- **0.1.0** — Initial release
+- **0.1.0** — Initial public release
 - **0.1.1** — Bug fixes
-- **0.2.0** — New features (backward compatible)
-- **1.0.0** — Stable API
-
-Update `version` in `pyproject.toml` and `src/g_sheet_mcp/__init__.py`.
+- **0.2.0** — New backward-compatible features
+- **1.0.0** — Stable API / docs / release workflow
 
 ---
 
-## GitHub Release Workflow
+## Usage after publishing
 
-1. Update `CHANGELOG.md` with release notes
-2. Commit version bump: `git commit -m "chore: bump version to 0.1.0"`
-3. Tag the release: `git tag v0.1.0`
-4. Push with tags: `git push origin main --tags`
-5. Build and upload to PyPI (see above)
-6. Create GitHub release from the tag
-
----
-
-## Automation with GitHub Actions (Optional)
-
-Create `.github/workflows/publish.yml`:
-
-```yaml
-name: Publish to PyPI
-
-on:
-  release:
-    types: [published]
-
-jobs:
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
-      - run: uv build
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
-```
-
-Add `PYPI_API_TOKEN` to GitHub repo secrets.
-
----
-
-## Usage After Publishing
-
-### Simple installation
+### Install or run
 
 ```bash
-# With pip
-pip install g-sheet-mcp
-
-# With uvx (ephemeral)
+# Ephemeral run with uvx
 uvx g-sheet-mcp
 
-# With pipx (persistent)
+# Persistent install
 pipx install g-sheet-mcp
 ```
 
-### Editor configs become simpler
+### Editor configs get simpler
 
-**Before (local):**
+**Before (local clone):**
+
 ```json
 {
   "command": "uv",
-  "args": ["run", "--directory", "/path/to/g_sheet_mcp", "g-sheet-mcp"]
+  "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
 }
 ```
 
-**After (published):**
+**After (PyPI):**
+
 ```json
 {
-  "command": "g-sheet-mcp"
+  "command": "uvx",
+  "args": ["g-sheet-mcp"]
 }
 ```
 
 ---
 
-## Do You Need to Publish?
+## Do you need to publish?
 
-**No, if:**
-- You're the only user
-- You prefer local development workflow
-- You want to avoid PyPI maintenance
+**Probably no, if:**
 
-**Yes, if:**
-- You want others to easily install it
-- You want simpler editor integration
-- You want to share it with the community
+- you are the only user
+- GitHub + `uvx --from git+...` is enough
+- you want to avoid PyPI maintenance
 
-The project is fully functional either way!
+**Probably yes, if:**
+
+- you want the shortest install path (`uvx g-sheet-mcp`)
+- you want simpler editor setup snippets
+- you want a standard public package page for the project
+
+The project is fully functional even before PyPI publishing.

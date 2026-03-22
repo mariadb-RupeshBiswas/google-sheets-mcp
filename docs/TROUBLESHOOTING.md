@@ -103,7 +103,7 @@ Then in the editor config:
 ```json
 {
   "command": "/opt/homebrew/bin/uv",
-  "args": ["--directory", "/path/to/g_sheet_mcp", "run", "g-sheet-mcp"]
+  "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
 }
 ```
 
@@ -135,7 +135,7 @@ uv run pytest tests/ -v --ignore=tests/test_integration.py
 
 Integration tests require both `INTEGRATION=1` and `TEST_SPREADSHEET_ID`:
 ```bash
-INTEGRATION=1 TEST_SPREADSHEET_ID=your_id uv run pytest tests/test_integration.py -v -s
+INTEGRATION=1 TEST_SPREADSHEET_ID=your_test_spreadsheet_id uv run pytest tests/test_integration.py -v -s
 ```
 
 ### Integration tests fail with auth errors
@@ -143,7 +143,7 @@ INTEGRATION=1 TEST_SPREADSHEET_ID=your_id uv run pytest tests/test_integration.p
 Ensure ADC is set up:
 ```bash
 gcloud auth login --enable-gdrive-access --update-adc
-INTEGRATION=1 TEST_SPREADSHEET_ID=your_id uv run pytest tests/test_integration.py -v -s
+INTEGRATION=1 TEST_SPREADSHEET_ID=your_test_spreadsheet_id uv run pytest tests/test_integration.py -v -s
 ```
 
 ---

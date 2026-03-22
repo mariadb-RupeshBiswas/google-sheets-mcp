@@ -1,4 +1,4 @@
-# Editor Integration Guide
+# 🧩 Editor Integration Guide
 
 Connect the Google Sheets MCP server to your AI coding assistant.
 
@@ -23,13 +23,13 @@ Windsurf reads MCP config from `~/.codeium/windsurf/mcp_config.json`.
   "mcpServers": {
     "google-sheets": {
       "command": "uv",
-      "args": ["--directory", "/absolute/path/to/g_sheet_mcp", "run", "g-sheet-mcp"]
+      "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
     }
   }
 }
 ```
 
-Replace `/absolute/path/to/g_sheet_mcp` with your actual path.
+Replace `/absolute/path/to/google-sheets-mcp` with your actual path.
 
 **Option B: From GitHub (no path needed)**
 
@@ -38,7 +38,7 @@ Replace `/absolute/path/to/g_sheet_mcp` with your actual path.
   "mcpServers": {
     "google-sheets": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/<your-user-or-org>/<repo>", "g-sheet-mcp"]
+      "args": ["--from", "git+https://github.com/mariadb-RupeshBiswas/google-sheets-mcp", "g-sheet-mcp"]
     }
   }
 }
@@ -85,7 +85,7 @@ or edit `~/.cursor/mcp.json` directly.
   "mcpServers": {
     "google-sheets": {
       "command": "uv",
-      "args": ["--directory", "/absolute/path/to/g_sheet_mcp", "run", "g-sheet-mcp"]
+      "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
     }
   }
 }
@@ -98,7 +98,7 @@ or edit `~/.cursor/mcp.json` directly.
   "mcpServers": {
     "google-sheets": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/<your-user-or-org>/<repo>", "g-sheet-mcp"]
+      "args": ["--from", "git+https://github.com/mariadb-RupeshBiswas/google-sheets-mcp", "g-sheet-mcp"]
     }
   }
 }
@@ -150,7 +150,7 @@ Open the config file (create it if missing) and add:
   "mcpServers": {
     "google-sheets": {
       "command": "uv",
-      "args": ["run", "--directory", "/absolute/path/to/g_sheet_mcp", "g-sheet-mcp"]
+      "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
     }
   }
 }
@@ -163,7 +163,7 @@ Open the config file (create it if missing) and add:
   "mcpServers": {
     "google-sheets": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/<your-user-or-org>/<repo>", "g-sheet-mcp"]
+      "args": ["--from", "git+https://github.com/mariadb-RupeshBiswas/google-sheets-mcp", "g-sheet-mcp"]
     }
   }
 }
@@ -215,7 +215,7 @@ Or edit `~/.vscode/mcp.json` directly.
     "google-sheets": {
       "type": "stdio",
       "command": "uv",
-      "args": ["--directory", "/absolute/path/to/g_sheet_mcp", "run", "g-sheet-mcp"]
+      "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
     }
   }
 }
@@ -229,7 +229,7 @@ Or edit `~/.vscode/mcp.json` directly.
     "google-sheets": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/<your-user-or-org>/<repo>", "g-sheet-mcp"]
+      "args": ["--from", "git+https://github.com/mariadb-RupeshBiswas/google-sheets-mcp", "g-sheet-mcp"]
     }
   }
 }
@@ -272,6 +272,8 @@ Zed supports MCP in its Assistant panel.
 
 ### Step 2 — Add the server
 
+**Option A: Local clone**
+
 ```json
 {
   "context_servers": {
@@ -280,10 +282,44 @@ Zed supports MCP in its Assistant panel.
         "path": "uv",
         "args": [
           "--directory",
-          "/absolute/path/to/g_sheet_mcp",
+          "/absolute/path/to/google-sheets-mcp",
           "run",
           "g-sheet-mcp"
         ]
+      }
+    }
+  }
+}
+```
+
+**Option B: From GitHub (no path needed)**
+
+```json
+{
+  "context_servers": {
+    "google-sheets": {
+      "command": {
+        "path": "uvx",
+        "args": [
+          "--from",
+          "git+https://github.com/mariadb-RupeshBiswas/google-sheets-mcp",
+          "g-sheet-mcp"
+        ]
+      }
+    }
+  }
+}
+```
+
+**Option C: From PyPI (after publishing)**
+
+```json
+{
+  "context_servers": {
+    "google-sheets": {
+      "command": {
+        "path": "uvx",
+        "args": ["g-sheet-mcp"]
       }
     }
   }
@@ -300,9 +336,25 @@ Reopen Zed and open the Assistant panel. The server will appear in the context l
 
 Claude Code is Anthropic's terminal-based coding agent.
 
+**Option A: Local clone**
+
 ```bash
 claude mcp add --transport stdio google-sheets -- \
-  uv run --directory /absolute/path/to/g_sheet_mcp g-sheet-mcp
+  uv --directory /absolute/path/to/google-sheets-mcp run g-sheet-mcp
+```
+
+**Option B: From GitHub (no path needed)**
+
+```bash
+claude mcp add --transport stdio google-sheets -- \
+  uvx --from git+https://github.com/mariadb-RupeshBiswas/google-sheets-mcp g-sheet-mcp
+```
+
+**Option C: From PyPI (after publishing)**
+
+```bash
+claude mcp add --transport stdio google-sheets -- \
+  uvx g-sheet-mcp
 ```
 
 Verify:

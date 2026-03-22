@@ -30,6 +30,12 @@ This project is a **read-only** MCP server with the following security guarantee
 | Arbitrary outbound requests | The code only uses Google auth and Google API client libraries; it does not fetch user-supplied URLs |
 | Dependency vulnerabilities | Dependencies are version-constrained in `pyproject.toml`; use a committed lockfile for reproducible builds |
 
+### 🧼 Public-repo hygiene
+
+- All tracked docs, tests, and examples are expected to use placeholder spreadsheet IDs or generic mock data
+- Customer names, emails, account IDs, and internal business terminology should never be committed as examples
+- If you add new sample content, keep it synthetic, sanitized, and safe for a public repository
+
 ## Reporting a Vulnerability
 
 If you discover a security vulnerability, please open a **private** GitHub security advisory for the repository if that feature is enabled.

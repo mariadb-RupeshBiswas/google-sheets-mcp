@@ -1,4 +1,4 @@
-# Quick Start — 5 minutes to first data
+# ⚡ Quick Start — 5 minutes to first data
 
 ## Prerequisites
 
@@ -13,9 +13,22 @@
 ## Step 1 — Clone and install
 
 ```bash
-git clone <your-repo-url>
-cd g_sheet_mcp
+git clone https://github.com/mariadb-RupeshBiswas/google-sheets-mcp.git
+cd google-sheets-mcp
 uv sync
+```
+
+Prefer a zero-clone workflow?
+
+```bash
+# Run directly from GitHub
+uvx --from git+https://github.com/mariadb-RupeshBiswas/google-sheets-mcp g-sheet-mcp --help
+
+# Run from a local path
+uvx --from /absolute/path/to/google-sheets-mcp g-sheet-mcp --help
+
+# Run from PyPI after publishing
+uvx g-sheet-mcp --help
 ```
 
 ---
@@ -37,7 +50,7 @@ A browser window opens. Sign in with the Google account that has access to your 
 ## Step 3 — Test it works
 
 ```bash
-INTEGRATION=1 TEST_SPREADSHEET_ID=your_id uv run pytest tests/test_integration.py -v -s
+INTEGRATION=1 TEST_SPREADSHEET_ID=your_test_spreadsheet_id uv run pytest tests/test_integration.py -v -s
 ```
 
 You should see the spreadsheet title and all sheet tabs printed in the output.
