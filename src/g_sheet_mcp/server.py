@@ -28,12 +28,13 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 mcp = FastMCP(
-    name="g-sheet-mcp",
+    name="google-sheets",
     instructions=(
-        "A read-only Google Sheets server.  "
+        "A read-only Google Sheets MCP server with 8 tools and 1 metadata resource.  "
         "All tools accept either a full Google Sheets URL or a bare spreadsheet ID.  "
         "Authentication uses Application Default Credentials – run "
-        "`gcloud auth login --enable-gdrive-access --update-adc` once before use."
+        "`gcloud auth login --enable-gdrive-access --update-adc` once before use.  "
+        "A templated resource is also available at `spreadsheet://<spreadsheet_id>/info`."
     ),
 )
 
