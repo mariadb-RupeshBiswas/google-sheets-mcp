@@ -69,21 +69,33 @@ Notes:
 
 ---
 
-## Option B — Trusted publishing via GitHub Actions (recommended)
+## Option B — Publish from GitHub Actions with a PyPI token
 
-This repo can publish without storing a PyPI token if you configure PyPI trusted publishing.
+This repo now supports publishing from the GitHub `pypi` environment using the environment secret:
 
-### PyPI setup
+- `PYPI__TOKEN__`
+
+The workflow is intentionally restricted so publishing only runs from **protected `main`** via **manual `workflow_dispatch`**.
+
+### GitHub setup
 
 1. Create the `g-sheet-mcp` project on PyPI
-2. In PyPI, add a **Trusted Publisher** for:
-   - **Owner:** `mariadb-RupeshBiswas`
-   - **Repository:** `google-sheets-mcp`
-   - **Workflow:** `publish.yml`
-   - **Environment:** `pypi`
-3. Push a version tag such as `v0.1.0`
+2. Add the PyPI API token as the `PYPI__TOKEN__` secret in the GitHub `pypi` environment
+3. Protect the `main` branch
+4. Run the `Publish` workflow from `main`
 
-The matching workflow can live at `.github/workflows/publish.yml` and publish with `uv publish --trusted-publishing=always`.
+The workflow in `.github/workflows/publish.yml` builds with `uv build` and uploads with `uv publish` using the environment secret.
+
+### Optional alternative — trusted publishing
+
+If you prefer not to store a PyPI token in GitHub, you can switch back to trusted publishing.
+
+Configure a PyPI trusted publisher for:
+
+- **Owner:** `mariadb-RupeshBiswas`
+- **Repository:** `google-sheets-mcp`
+- **Workflow:** `publish.yml`
+- **Environment:** `pypi`
 
 If GitHub Actions fails with `invalid-publisher` or `no corresponding publisher`, the PyPI trusted publisher does not yet match these workflow claims.
 
@@ -116,7 +128,7 @@ git tag v0.1.0
 git push origin main --tags
 ```
 
-7. Publish manually with `uv publish` or let GitHub Actions handle it
+7. Publish manually with `uv publish` or run the GitHub `Publish` workflow from protected `main`
 
 ---
 

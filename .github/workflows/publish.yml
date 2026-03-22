@@ -1,17 +1,14 @@
 name: Publish
 
 on:
-  push:
-    tags:
-      - "v*"
   workflow_dispatch:
 
 permissions:
   contents: read
-  id-token: write
 
 jobs:
   publish:
+    if: github.ref == 'refs/heads/main' && github.ref_protected == true
     runs-on: ubuntu-latest
     environment: pypi
 
@@ -31,4 +28,6 @@ jobs:
         run: uv build
 
       - name: Publish to PyPI
-        run: uv publish --trusted-publishing=always
+        env:
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI__TOKEN__ }}
+        run: uv publish
