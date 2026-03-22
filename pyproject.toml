@@ -1,10 +1,11 @@
 [project]
 name = "g-sheet-mcp"
 version = "0.1.0"
-description = "A Model Context Protocol (MCP) server for reading Google Sheets using Application Default Credentials (ADC)"
+description = "Read-only Google Sheets MCP server with ADC auth for Cascade, Cursor, Copilot, Claude, and other MCP clients"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
+license-files = ["LICENSE"]
 keywords = ["mcp", "google-sheets", "llm", "ai", "anthropic", "claude"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -37,6 +38,12 @@ dev = [
 
 [project.scripts]
 g-sheet-mcp = "g_sheet_mcp.server:main"
+
+[project.urls]
+Homepage = "https://github.com/mariadb-RupeshBiswas/google-sheets-mcp"
+Repository = "https://github.com/mariadb-RupeshBiswas/google-sheets-mcp"
+Issues = "https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/issues"
+Documentation = "https://github.com/mariadb-RupeshBiswas/google-sheets-mcp#readme"
 
 [build-system]
 requires = ["hatchling"]
