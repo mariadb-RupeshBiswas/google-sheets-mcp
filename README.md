@@ -7,7 +7,7 @@ direct access to Google Sheets data — authenticated via
 
 No service account JSON.  No hardcoded secrets.  One command to authenticate, works everywhere.
 
-Repo: `google-sheets-mcp`  ·  CLI/package: `g-sheet-mcp`  ·  Python import: `g_sheet_mcp`
+Repo: `google-sheets-mcp`  ·  [PyPI](https://pypi.org/project/g-sheet-mcp/)  ·  CLI/package: `g-sheet-mcp`  ·  Python import: `g_sheet_mcp`
 
 All examples in this repo are generic and sanitized for public release.
 
@@ -70,6 +70,8 @@ uvx --from /absolute/path/to/google-sheets-mcp g-sheet-mcp
 ```bash
 uvx g-sheet-mcp
 
+# Optional: pin an exact release
+uvx --from g-sheet-mcp==0.1.1 g-sheet-mcp
 # Optional persistent install
 pipx install g-sheet-mcp
 ```
@@ -105,6 +107,7 @@ uv run g-sheet-mcp --debug  # verbose logging
 - **[Troubleshooting](docs/TROUBLESHOOTING.md)** — Common issues and fixes
 - **[Security](SECURITY.md)** — Security model, public-repo hygiene, and reporting policy
 - **[Publishing](docs/PUBLISHING.md)** — PyPI publishing guide (optional)
+- **[Versioning](docs/VERSIONING.md)** — PEP 440 + SemVer release policy for this project
 - **[Contributing](CONTRIBUTING.md)** — Development guide
 
 ---

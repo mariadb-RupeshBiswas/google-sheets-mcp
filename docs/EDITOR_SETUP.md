@@ -46,6 +46,22 @@ Replace `/absolute/path/to/google-sheets-mcp` with your actual path.
 
 **Option C: From PyPI (after publishing)**
 
+This is the recommended default once the package is on PyPI. If you want to pin a specific
+release for reproducibility, use:
+
+```json
+{
+  "mcpServers": {
+    "google-sheets": {
+      "command": "uvx",
+      "args": ["--from", "g-sheet-mcp==0.1.1", "g-sheet-mcp"]
+    }
+  }
+}
+```
+
+Otherwise, use the default:
+
 ```json
 {
   "mcpServers": {

@@ -1,10 +1,11 @@
 [project]
 name = "g-sheet-mcp"
-version = "0.1.0"
+version = "0.1.1"
 description = "Read-only Google Sheets MCP server with ADC auth for Cascade, Cursor, Copilot, Claude, and other MCP clients"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+authors = [{ name = "Rupesh Biswas", email = "rupesh.biswas@mariadb.com" }]
+license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["mcp", "google-sheets", "llm", "ai", "anthropic", "claude"]
 classifiers = [
@@ -44,6 +45,7 @@ Homepage = "https://github.com/mariadb-RupeshBiswas/google-sheets-mcp"
 Repository = "https://github.com/mariadb-RupeshBiswas/google-sheets-mcp"
 Issues = "https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/issues"
 Documentation = "https://github.com/mariadb-RupeshBiswas/google-sheets-mcp#readme"
+PyPI = "https://pypi.org/project/g-sheet-mcp/"
 
 [build-system]
 requires = ["hatchling"]
