@@ -2,7 +2,7 @@
 
 Set INTEGRATION=1 and TEST_SPREADSHEET_ID to enable these tests:
 
-    INTEGRATION=1 TEST_SPREADSHEET_ID=your_spreadsheet_id uv run pytest tests/test_integration.py -v -s
+    INTEGRATION=1 TEST_SPREADSHEET_ID=your_test_spreadsheet_id uv run pytest tests/test_integration.py -v -s
 
 The test spreadsheet should have multiple tabs with data for comprehensive testing.
 """
