@@ -13,8 +13,6 @@ import os
 
 import pytest
 
-from g_sheet_mcp.sheets import SheetsClient
-
 # Read spreadsheet ID from environment variable
 SAMPLE_ID = os.environ.get("TEST_SPREADSHEET_ID", "")
 SAMPLE_URL = f"https://docs.google.com/spreadsheets/d/{SAMPLE_ID}/edit?gid=0#gid=0" if SAMPLE_ID else ""

@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+import os
 from unittest.mock import MagicMock, patch
 
-import os
 import pytest
 
 SAMPLE_SPREADSHEET_ID = os.environ.get("TEST_SPREADSHEET_ID", "test_spreadsheet_id_placeholder")

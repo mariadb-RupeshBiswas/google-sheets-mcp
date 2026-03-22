@@ -46,9 +46,9 @@ class TestEnsureAuthenticated:
         with (
             patch("g_sheet_mcp.auth.credentials_exist", return_value=False),
             patch("g_sheet_mcp.auth._gcloud_installed", return_value=False),
+            pytest.raises(AuthError, match="gcloud.*not found"),
         ):
-            with pytest.raises(AuthError, match="gcloud.*not found"):
-                ensure_authenticated()
+            ensure_authenticated()
 
     def test_raises_when_gcloud_auth_exits_nonzero(self):
         mock_result = MagicMock()
@@ -57,9 +57,9 @@ class TestEnsureAuthenticated:
             patch("g_sheet_mcp.auth.credentials_exist", return_value=False),
             patch("g_sheet_mcp.auth._gcloud_installed", return_value=True),
             patch("g_sheet_mcp.auth.subprocess.run", return_value=mock_result),
+            pytest.raises(AuthError, match="Authentication failed"),
         ):
-            with pytest.raises(AuthError, match="Authentication failed"):
-                ensure_authenticated()
+            ensure_authenticated()
 
     def test_succeeds_when_gcloud_auth_returns_zero(self):
         mock_result = MagicMock()
@@ -111,9 +111,9 @@ class TestGetCredentials:
                 "g_sheet_mcp.auth.google.auth.default",
                 side_effect=google.auth.exceptions.DefaultCredentialsError("no creds"),
             ),
+            pytest.raises(AuthError, match="gcloud auth login"),
         ):
-            with pytest.raises(AuthError, match="gcloud auth login"):
-                get_credentials()
+            get_credentials()
 
     def test_raises_auth_error_on_refresh_failure(self):
         import google.auth.exceptions
@@ -126,6 +126,6 @@ class TestGetCredentials:
             self._patch_ensure(),
             patch("g_sheet_mcp.auth.google.auth.default", return_value=(mock_creds, "proj")),
             patch("g_sheet_mcp.auth.Request"),
+            pytest.raises(AuthError, match="refresh"),
         ):
-            with pytest.raises(AuthError, match="refresh"):
-                get_credentials()
+            get_credentials()
