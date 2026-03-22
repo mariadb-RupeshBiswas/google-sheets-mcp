@@ -14,7 +14,7 @@ Use the GitHub or local-clone variants only if you need unreleased changes or ar
 If you need reproducible editor setup, pin an exact release:
 
 ```bash
-uvx --from g-sheet-mcp==0.1.1 g-sheet-mcp
+uvx --from g-sheet-mcp==0.1.2 g-sheet-mcp
 ```
 
 ---
@@ -49,7 +49,7 @@ If you want to pin a specific release for reproducibility, use:
   "mcpServers": {
     "google-sheets": {
       "command": "uvx",
-      "args": ["--from", "g-sheet-mcp==0.1.1", "g-sheet-mcp"]
+      "args": ["--from", "g-sheet-mcp==0.1.2", "g-sheet-mcp"]
     }
   }
 }
