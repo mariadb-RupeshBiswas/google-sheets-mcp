@@ -208,7 +208,7 @@ def find_in_spreadsheet(
     results = _get_client().find_in_spreadsheet(
         spreadsheet_id=sid,
         query=query,
-        sheet_title=sheet_title or None,
+        sheet_title=sheet_title,
         case_sensitive=case_sensitive,
         max_results=max_results,
     )
@@ -328,9 +328,12 @@ def main() -> None:
 
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
+        mcp.settings.log_level = "DEBUG"
 
     if args.http:
-        mcp.run(transport="streamable-http", host=args.host, port=args.port)
+        mcp.settings.host = args.host
+        mcp.settings.port = args.port
+        mcp.run(transport="streamable-http")
     else:
         mcp.run(transport="stdio")
 
