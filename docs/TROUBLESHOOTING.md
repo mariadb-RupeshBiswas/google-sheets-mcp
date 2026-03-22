@@ -133,9 +133,9 @@ uv run pytest tests/ -v --ignore=tests/test_integration.py
 
 ### Integration tests skipped
 
-Integration tests require `INTEGRATION=1`:
+Integration tests require both `INTEGRATION=1` and `TEST_SPREADSHEET_ID`:
 ```bash
-INTEGRATION=1 uv run pytest tests/test_integration.py -v -s
+INTEGRATION=1 TEST_SPREADSHEET_ID=your_id uv run pytest tests/test_integration.py -v -s
 ```
 
 ### Integration tests fail with auth errors
@@ -143,7 +143,7 @@ INTEGRATION=1 uv run pytest tests/test_integration.py -v -s
 Ensure ADC is set up:
 ```bash
 gcloud auth login --enable-gdrive-access --update-adc
-INTEGRATION=1 uv run pytest tests/test_integration.py -v -s
+INTEGRATION=1 TEST_SPREADSHEET_ID=your_id uv run pytest tests/test_integration.py -v -s
 ```
 
 ---

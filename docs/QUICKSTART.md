@@ -13,7 +13,7 @@
 ## Step 1 — Clone and install
 
 ```bash
-git clone https://github.com/yourusername/g_sheet_mcp.git
+git clone <your-repo-url>
 cd g_sheet_mcp
 uv sync
 ```
@@ -37,7 +37,7 @@ A browser window opens. Sign in with the Google account that has access to your 
 ## Step 3 — Test it works
 
 ```bash
-INTEGRATION=1 uv run pytest tests/test_integration.py -v -s
+INTEGRATION=1 TEST_SPREADSHEET_ID=your_id uv run pytest tests/test_integration.py -v -s
 ```
 
 You should see the spreadsheet title and all sheet tabs printed in the output.

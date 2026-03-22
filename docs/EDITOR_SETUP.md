@@ -38,7 +38,7 @@ Replace `/absolute/path/to/g_sheet_mcp` with your actual path.
   "mcpServers": {
     "google-sheets": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/yourusername/g_sheet_mcp", "g-sheet-mcp"]
+      "args": ["--from", "git+https://github.com/<your-user-or-org>/<repo>", "g-sheet-mcp"]
     }
   }
 }
@@ -98,7 +98,7 @@ or edit `~/.cursor/mcp.json` directly.
   "mcpServers": {
     "google-sheets": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/yourusername/g_sheet_mcp", "g-sheet-mcp"]
+      "args": ["--from", "git+https://github.com/<your-user-or-org>/<repo>", "g-sheet-mcp"]
     }
   }
 }
@@ -163,7 +163,7 @@ Open the config file (create it if missing) and add:
   "mcpServers": {
     "google-sheets": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/yourusername/g_sheet_mcp", "g-sheet-mcp"]
+      "args": ["--from", "git+https://github.com/<your-user-or-org>/<repo>", "g-sheet-mcp"]
     }
   }
 }
@@ -229,7 +229,7 @@ Or edit `~/.vscode/mcp.json` directly.
     "google-sheets": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/yourusername/g_sheet_mcp", "g-sheet-mcp"]
+      "args": ["--from", "git+https://github.com/<your-user-or-org>/<repo>", "g-sheet-mcp"]
     }
   }
 }

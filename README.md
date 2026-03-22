@@ -43,7 +43,7 @@ brew install google-cloud-sdk
 ### Option 1: Local Clone (Recommended for Development)
 
 ```bash
-git clone https://github.com/yourusername/g_sheet_mcp.git
+git clone <your-repo-url>
 cd g_sheet_mcp
 uv sync
 ```
@@ -52,7 +52,7 @@ uv sync
 
 ```bash
 # From GitHub (no clone needed)
-uvx --from git+https://github.com/yourusername/g_sheet_mcp g-sheet-mcp
+uvx --from git+https://github.com/<your-user-or-org>/<repo> g-sheet-mcp
 
 # From local path
 uvx --from /absolute/path/to/g_sheet_mcp g-sheet-mcp
@@ -281,8 +281,8 @@ value_render_option: str
 ```bash
 uv sync --extra dev              # install with dev deps
 
-uv run pytest                    # unit tests (38+ cases)
-INTEGRATION=1 uv run pytest tests/test_integration.py -v -s   # live API tests
+uv run pytest tests/ --ignore=tests/test_integration.py       # unit tests (71 tests)
+INTEGRATION=1 TEST_SPREADSHEET_ID=your_id uv run pytest tests/test_integration.py -v -s
 
 uv run ruff check src tests      # lint
 uv run mypy src                  # type check
