@@ -94,26 +94,28 @@ https://docs.google.com/spreadsheets/d/THIS_IS_THE_ID/edit
 ### Server not appearing in editor MCP panel
 
 1. Verify `uv` is installed: `uv --version`
-2. Verify the path in the config is the **absolute** path to this repo
-3. Run `uv run g-sheet-mcp` manually in the terminal — if it errors, fix that first
+2. If you are using a local-clone config, verify the path in the config is the **absolute** path to this repo
+3. Run the same command from your editor config manually in the terminal — for the recommended setup, try `uvx g-sheet-mcp`
 4. Check the editor's developer console / logs for MCP errors
 
 ### Editor uses a different PATH than the terminal
 
 Some editors launch processes without the full shell PATH.
 
-**Fix:** Use the full absolute path to `uv`:
+**Fix:** Use the full absolute path to `uvx` (or `uv` for local-clone configs):
 ```bash
-which uv   # e.g. /opt/homebrew/bin/uv
+which uvx   # e.g. /opt/homebrew/bin/uvx
 ```
 
 Then in the editor config:
 ```json
 {
-  "command": "/opt/homebrew/bin/uv",
-  "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
+  "command": "/opt/homebrew/bin/uvx",
+  "args": ["g-sheet-mcp"]
 }
 ```
+
+If you are intentionally using a local-clone config, keep `uv` and the `--directory ... run g-sheet-mcp` args instead.
 
 ### Works in terminal but not in editor
 
@@ -171,8 +173,10 @@ INTEGRATION=1 TEST_SPREADSHEET_ID=your_test_spreadsheet_id uv run pytest tests/t
 ### Enable debug logging
 
 ```bash
-uv run g-sheet-mcp --debug
+uvx g-sheet-mcp --debug
 ```
+
+If you are debugging a local checkout instead, run `uv run g-sheet-mcp --debug` from the repo.
 
 ### Inspect tools with MCP Inspector
 
@@ -184,7 +188,7 @@ uv run mcp dev src/g_sheet_mcp/server.py
 ### Test with curl (HTTP mode)
 
 ```bash
-uv run g-sheet-mcp --http &
+uvx g-sheet-mcp --http &
 
 # List available tools
 curl -s -X POST http://127.0.0.1:8000/mcp \
@@ -192,11 +196,13 @@ curl -s -X POST http://127.0.0.1:8000/mcp \
   -d '{"jsonrpc":"2.0","method":"tools/list","params":{},"id":1}' | python3 -m json.tool
 ```
 
+If you are testing a local checkout instead, run `uv run g-sheet-mcp --http` from the repo.
+
 ---
 
 ## Getting more help
 
-1. Run `uv run g-sheet-mcp --debug` and capture the stderr output
+1. Run `uvx g-sheet-mcp --debug` and capture the stderr output
 2. Check if the same error occurs with the MCP Inspector
 3. Confirm your `gcloud auth list` shows an active account
 4. Open an issue with the full error message and reproduction steps

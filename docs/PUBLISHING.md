@@ -168,7 +168,7 @@ Canonical policy and examples → **[docs/VERSIONING.md](VERSIONING.md)**
 
 ---
 
-## Usage after publishing
+## Using the published package
 
 ### Install or run
 
@@ -191,7 +191,7 @@ pipx install g-sheet-mcp
 }
 ```
 
-**After (PyPI):**
+**Published package (PyPI):**
 
 ```json
 {
@@ -216,4 +216,4 @@ pipx install g-sheet-mcp
 - you want simpler editor setup snippets
 - you want a standard public package page for the project
 
-The project is fully functional even before PyPI publishing.
+The project also supports GitHub and local-clone usage when you need unreleased changes or development workflows.

@@ -2,11 +2,8 @@
   "context_servers": {
     "google-sheets": {
       "command": {
-        "path": "uv",
+        "path": "uvx",
         "args": [
-          "--directory",
-          "/absolute/path/to/google-sheets-mcp",
-          "run",
           "g-sheet-mcp"
         ]
       }

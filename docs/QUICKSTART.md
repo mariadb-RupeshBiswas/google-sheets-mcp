@@ -10,15 +10,18 @@
 
 ---
 
-## Step 1 — Clone and install
+## Step 1 — Run the published package (recommended)
+
+This is the simplest setup for most users now that `g-sheet-mcp` is published on PyPI.
 
 ```bash
-git clone https://github.com/mariadb-RupeshBiswas/google-sheets-mcp.git
-cd google-sheets-mcp
-uv sync
+uvx g-sheet-mcp --help
+
+# Optional: pin an exact release
+uvx --from g-sheet-mcp==0.1.1 g-sheet-mcp --help
 ```
 
-Prefer a zero-clone workflow?
+Need unreleased changes or a local development checkout instead?
 
 ```bash
 # Run directly from GitHub
@@ -27,8 +30,10 @@ uvx --from git+https://github.com/mariadb-RupeshBiswas/google-sheets-mcp g-sheet
 # Run from a local path
 uvx --from /absolute/path/to/google-sheets-mcp g-sheet-mcp --help
 
-# Run from PyPI after publishing
-uvx g-sheet-mcp --help
+# Clone the repo for development
+git clone https://github.com/mariadb-RupeshBiswas/google-sheets-mcp.git
+cd google-sheets-mcp
+uv sync
 ```
 
 ---
@@ -47,17 +52,7 @@ A browser window opens. Sign in with the Google account that has access to your 
 
 ---
 
-## Step 3 — Test it works
-
-```bash
-INTEGRATION=1 TEST_SPREADSHEET_ID=your_test_spreadsheet_id uv run pytest tests/test_integration.py -v -s
-```
-
-You should see the spreadsheet title and all sheet tabs printed in the output.
-
----
-
-## Step 4 — Connect to your editor
+## Step 3 — Connect to your editor
 
 Pick your editor from the table below and follow the link:
 
@@ -72,7 +67,7 @@ Pick your editor from the table below and follow the link:
 
 ---
 
-## Step 5 — Ask your AI a question
+## Step 4 — Ask your AI a question
 
 Once connected, try prompts like:
 
@@ -93,5 +88,7 @@ Find all cells containing "invoice" in this spreadsheet: YOUR_SPREADSHEET_URL
 ## What's next?
 
 - Full tool reference → [README.md](../README.md#available-mcp-tools--reference)
+- Editor setup details → [EDITOR_SETUP.md](EDITOR_SETUP.md)
+- Development setup → [../CONTRIBUTING.md](../CONTRIBUTING.md)
 - Authentication details → [AUTH.md](AUTH.md)
 - Troubleshooting → [TROUBLESHOOTING.md](TROUBLESHOOTING.md)

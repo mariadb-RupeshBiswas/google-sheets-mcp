@@ -16,6 +16,7 @@ This is a read-only Google Sheets MCP server using FastMCP + Google Sheets API v
 - Run: `uv run`, Install: `uv sync`, Lock: `uv lock`
 - Never hardcode credentials; ADC only
 - Keep docs/tests/examples sanitized; never commit real spreadsheet IDs, emails, or customer/internal data
+- In user-facing setup docs and editor configuration examples, recommend the published PyPI flow `uvx g-sheet-mcp` first; keep GitHub and local-clone flows as alternatives for unreleased changes or repository development
 - Follow `docs/VERSIONING.md` for release numbering; use PEP 440-compliant SemVer
 - Keep `pyproject.toml` and `src/g_sheet_mcp/__init__.py` in sync when cutting a package release
 - Do not bump the package version for docs-only or CI-only changes unless a new PyPI release is intended

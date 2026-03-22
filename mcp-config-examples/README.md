@@ -2,13 +2,14 @@
 
 Ready-to-use configuration snippets for connecting the Google Sheets MCP server to various editors and AI assistants.
 
-These JSON files are the **local clone** variants. GitHub and PyPI / `uvx` variants are documented in [docs/EDITOR_SETUP.md](../docs/EDITOR_SETUP.md).
+These JSON files now use the recommended published PyPI / `uvx` setup.
+GitHub and local-clone variants are documented in [docs/EDITOR_SETUP.md](../docs/EDITOR_SETUP.md).
 
 ## Usage
 
 1. Copy the config file for your editor
-2. Replace `/absolute/path/to/google-sheets-mcp` with the real path on your machine
-3. Paste into your editor's MCP configuration file
+2. Paste it into your editor's MCP configuration file
+3. Restart the editor so it reloads MCP servers
 
 ---
 
@@ -18,7 +19,7 @@ These JSON files are the **local clone** variants. GitHub and PyPI / `uvx` varia
 
 ```bash
 cp windsurf.json ~/.codeium/windsurf/mcp_config.json
-# Edit the path, then restart Windsurf
+# Restart Windsurf
 ```
 
 ---
@@ -29,7 +30,7 @@ cp windsurf.json ~/.codeium/windsurf/mcp_config.json
 
 ```bash
 cp cursor.json ~/.cursor/mcp.json
-# Edit the path, then restart Cursor
+# Restart Cursor
 ```
 
 ---
@@ -40,7 +41,7 @@ cp cursor.json ~/.cursor/mcp.json
 
 ```bash
 cp claude-desktop.json ~/Library/Application\ Support/Claude/claude_desktop_config.json
-# Edit the path, then restart Claude Desktop
+# Restart Claude Desktop
 ```
 
 ---
@@ -51,7 +52,7 @@ cp claude-desktop.json ~/Library/Application\ Support/Claude/claude_desktop_conf
 
 ```bash
 cp vscode.json ~/.vscode/mcp.json
-# Edit the path, then restart VS Code
+# Restart VS Code
 ```
 
 ---
@@ -60,7 +61,7 @@ cp vscode.json ~/.vscode/mcp.json
 
 **Config file:** `~/.config/zed/settings.json`
 
-Merge the contents of `zed.json` into your existing Zed settings.json.
+Merge the contents of `zed.json` into your existing Zed settings.json and restart Zed.
 
 ---
 
@@ -68,5 +69,5 @@ Merge the contents of `zed.json` into your existing Zed settings.json.
 
 ```bash
 claude mcp add --transport stdio google-sheets -- \
-  uv --directory /absolute/path/to/google-sheets-mcp run g-sheet-mcp
+  uvx g-sheet-mcp
 ```
