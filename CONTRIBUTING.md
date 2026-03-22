@@ -125,6 +125,13 @@ def test_your_new_feature(client):
 - Add examples to `agents/EXAMPLES.md` if relevant
 - Keep all examples generic and safe for a public repository
 
+### 4a. Follow the versioning policy
+
+- This project uses **PEP 440-compliant Semantic Versioning**
+- Read **[docs/VERSIONING.md](docs/VERSIONING.md)** before choosing the next release number
+- Keep `pyproject.toml` and `src/g_sheet_mcp/__init__.py` in sync when cutting a new package release
+- Do not bump the package version for docs-only or CI-only changes unless you intentionally want a new PyPI release
+
 ### 5. Commit with Conventional Commits
 
 ```bash
@@ -179,6 +186,7 @@ test(integration): add test for URL handling
 - [ ] Type checking passes: `uv run mypy src/`
 - [ ] Documentation updated
 - [ ] `CHANGELOG.md` updated
+- [ ] Version bump follows `docs/VERSIONING.md` if a new package release is intended
 - [ ] Commit messages follow conventional format
 
 ---

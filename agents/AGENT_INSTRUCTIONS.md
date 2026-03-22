@@ -186,3 +186,9 @@ Agent:
    )
 2. Present the result as a formatted table
 ```
+
+## Repo maintenance note
+
+If you are modifying this repository itself rather than only using the MCP tools, follow
+`docs/VERSIONING.md` for release numbering, and keep `pyproject.toml` and
+`src/g_sheet_mcp/__init__.py` in sync when preparing a new package release.

@@ -16,6 +16,9 @@ This is a read-only Google Sheets MCP server using FastMCP + Google Sheets API v
 - Run: `uv run`, Install: `uv sync`, Lock: `uv lock`
 - Never hardcode credentials; ADC only
 - Keep docs/tests/examples sanitized; never commit real spreadsheet IDs, emails, or customer/internal data
+- Follow `docs/VERSIONING.md` for release numbering; use PEP 440-compliant SemVer
+- Keep `pyproject.toml` and `src/g_sheet_mcp/__init__.py` in sync when cutting a package release
+- Do not bump the package version for docs-only or CI-only changes unless a new PyPI release is intended
 - All public methods require docstrings
 - Input validation: ValueError for empty strings, out-of-range ints
 - Sheet names with spaces: use _quote_sheet() in range notation (auto-applied by read_sheet)

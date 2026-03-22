@@ -29,6 +29,8 @@ When cutting a release, update both version locations:
 - `pyproject.toml`
 - `src/g_sheet_mcp/__init__.py`
 
+Follow **[docs/VERSIONING.md](VERSIONING.md)** for the release policy that determines whether the next version should be a patch, minor, or major bump.
+
 ### 2. Refresh the lockfile and build artifacts
 
 ```bash
@@ -90,6 +92,14 @@ The workflow in `.github/workflows/publish.yml` builds with `uv build`, checks P
 exact built filenames, and uploads with `uv publish --check-url https://pypi.org/simple/` when
 that version is not already fully published.
 
+### GitHub sidebar note: Releases vs Packages vs PyPI
+
+- Publishing to **PyPI** does **not** populate the **Packages** section in the GitHub repo sidebar
+- GitHub **Packages** only shows artifacts published to GitHub's own package registries
+- GitHub **Releases** are also separate — they appear only when you create a GitHub Release object from a tag
+
+So it is normal for this repo to have a PyPI package while the GitHub **Packages** section remains empty.
+
 ### What happens on every push to `main`
 
 - If the built artifacts for the current version do **not** exist on PyPI, the workflow publishes them
@@ -132,7 +142,7 @@ uv run pytest tests/ --ignore=tests/test_integration.py -q
 5. Create a tag:
 
 ```bash
-git tag v0.1.0
+git tag vX.Y.Z
 ```
 
 6. Push commits and tags:
@@ -148,12 +158,13 @@ git push origin main --tags
 
 ## Versioning strategy
 
-Follow [Semantic Versioning](https://semver.org/):
+This project uses **PEP 440-compliant Semantic Versioning**.
 
-- **0.1.0** — Initial public release
-- **0.1.1** — Bug fixes
-- **0.2.0** — New backward-compatible features
-- **1.0.0** — Stable API / docs / release workflow
+- **Patch** — backward-compatible fixes
+- **Minor** — backward-compatible features and pre-1.0 breaking changes
+- **Major** — reserved for `1.0.0` and later stable breaking changes
+
+Canonical policy and examples → **[docs/VERSIONING.md](VERSIONING.md)**
 
 ---
 
