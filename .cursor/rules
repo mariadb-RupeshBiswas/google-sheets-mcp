@@ -19,7 +19,7 @@ This is a read-only Google Sheets MCP server using FastMCP + Google Sheets API v
 - Input validation: raise ValueError for empty strings, out-of-range ints
 - Sheet names with spaces must be wrapped with _quote_sheet() in range notation
 - Tests live in tests/; run with `uv run pytest`
-- Integration tests: `INTEGRATION=1 uv run pytest tests/test_integration.py`
+- Integration tests: `INTEGRATION=1 TEST_SPREADSHEET_ID=your_id uv run pytest tests/test_integration.py`
 
 ## MCP tools (8)
 get_spreadsheet_info, list_sheets, read_range, read_sheet, read_sheet_as_records,

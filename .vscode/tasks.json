@@ -92,7 +92,8 @@
       },
       "options": {
         "env": {
-          "INTEGRATION": "1"
+          "INTEGRATION": "1",
+          "TEST_SPREADSHEET_ID": "${input:testSpreadsheetId}"
         }
       }
     },
@@ -115,7 +116,8 @@
       },
       "options": {
         "env": {
-          "INTEGRATION": "1"
+          "INTEGRATION": "1",
+          "TEST_SPREADSHEET_ID": "${input:testSpreadsheetId}"
         }
       }
     },
@@ -278,6 +280,14 @@
         "kind": "build",
         "isDefault": true
       }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "testSpreadsheetId",
+      "type": "promptString",
+      "description": "Google Sheets spreadsheet ID for live integration tests",
+      "default": "your_spreadsheet_id"
     }
   ]
 }
