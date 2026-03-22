@@ -28,6 +28,8 @@
 - `LICENSE` — MIT license
 
 ### Changed
+- README and setup docs now use publish-ready links and pinned version examples so the PyPI project description renders correctly after the next release
+- Publish workflow now compares artifact hashes and skips already-published release conflicts instead of failing on docs-only rebuilds of the same version
 - Public docs/config updated for the `mariadb-RupeshBiswas/google-sheets-mcp` repository and all three run modes (local clone, GitHub, local path / PyPI with `uvx`)
 - Publish workflow now skips versions whose built artifacts already exist on PyPI, avoiding duplicate-upload failures
 - The running MCP server now reloads updated ADC credentials on the next request after re-authentication

@@ -18,7 +18,7 @@ This is the simplest setup for most users now that `g-sheet-mcp` is published on
 uvx g-sheet-mcp --help
 
 # Optional: pin an exact release
-uvx --from g-sheet-mcp==0.1.1 g-sheet-mcp --help
+uvx --from g-sheet-mcp==0.1.2 g-sheet-mcp --help
 ```
 
 Need unreleased changes or a local development checkout instead?

@@ -53,7 +53,7 @@ This is the recommended setup for most users now that the package is published o
 uvx g-sheet-mcp
 
 # Optional: pin an exact release
-uvx --from g-sheet-mcp==0.1.1 g-sheet-mcp
+uvx --from g-sheet-mcp==0.1.2 g-sheet-mcp
 
 # Optional persistent install
 pipx install g-sheet-mcp

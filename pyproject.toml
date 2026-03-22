@@ -1,6 +1,6 @@
 [project]
 name = "g-sheet-mcp"
-version = "0.1.1"
+version = "0.1.2"
 description = "Read-only Google Sheets MCP server with ADC auth for Cascade, Cursor, Copilot, Claude, and other MCP clients"
 readme = "README.md"
 requires-python = ">=3.11"
