@@ -5,7 +5,7 @@
         "path": "uv",
         "args": [
           "--directory",
-          "/absolute/path/to/g_sheet_mcp",
+          "/absolute/path/to/google-sheets-mcp",
           "run",
           "g-sheet-mcp"
         ]

@@ -1,11 +1,13 @@
-# MCP Config Examples
+# 🧩 MCP Config Examples
 
 Ready-to-use configuration snippets for connecting the Google Sheets MCP server to various editors and AI assistants.
+
+These JSON files are the **local clone** variants. GitHub and PyPI / `uvx` variants are documented in [docs/EDITOR_SETUP.md](../docs/EDITOR_SETUP.md).
 
 ## Usage
 
 1. Copy the config file for your editor
-2. Replace `/absolute/path/to/g_sheet_mcp` with the real path on your machine
+2. Replace `/absolute/path/to/google-sheets-mcp` with the real path on your machine
 3. Paste into your editor's MCP configuration file
 
 ---
@@ -66,5 +68,5 @@ Merge the contents of `zed.json` into your existing Zed settings.json.
 
 ```bash
 claude mcp add --transport stdio google-sheets -- \
-  uv run --directory /absolute/path/to/g_sheet_mcp g-sheet-mcp
+  uv --directory /absolute/path/to/google-sheets-mcp run g-sheet-mcp
 ```

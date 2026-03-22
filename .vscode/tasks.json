@@ -2,7 +2,8 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Run MCP Server (stdio)",
+      "label": "🚀 Run MCP Server (stdio)",
+      "detail": "Start the MCP server in stdio mode for editors and MCP clients.",
       "type": "shell",
       "command": "uv",
       "args": ["run", "g-sheet-mcp"],
@@ -20,7 +21,8 @@
       }
     },
     {
-      "label": "Run MCP Server (HTTP)",
+      "label": "🌐 Run MCP Server (HTTP)",
+      "detail": "Start the streamable HTTP server at http://127.0.0.1:8000/mcp.",
       "type": "shell",
       "command": "uv",
       "args": ["run", "g-sheet-mcp", "--http"],
@@ -38,7 +40,8 @@
       }
     },
     {
-      "label": "Run MCP Server (Debug)",
+      "label": "🐞 Run MCP Server (Debug)",
+      "detail": "Start the server with verbose logging for troubleshooting.",
       "type": "shell",
       "command": "uv",
       "args": ["run", "g-sheet-mcp", "--debug"],
@@ -56,7 +59,8 @@
       }
     },
     {
-      "label": "Run Unit Tests",
+      "label": "🧪 Run Unit Tests",
+      "detail": "Run fast local tests without live Google API calls.",
       "type": "shell",
       "command": "uv",
       "args": ["run", "pytest", "tests/", "--ignore=tests/test_integration.py", "-v"],
@@ -74,7 +78,8 @@
       }
     },
     {
-      "label": "Run Integration Tests",
+      "label": "🧪 Run Integration Tests",
+      "detail": "Run live Google Sheets tests with ADC and a test spreadsheet ID.",
       "type": "shell",
       "command": "uv",
       "args": ["run", "pytest", "tests/test_integration.py", "-v"],
@@ -98,7 +103,8 @@
       }
     },
     {
-      "label": "Run All Tests",
+      "label": "🧪 Run All Tests",
+      "detail": "Run unit and integration tests together.",
       "type": "shell",
       "command": "uv",
       "args": ["run", "pytest", "tests/", "-v"],
@@ -122,7 +128,8 @@
       }
     },
     {
-      "label": "Run Tests with Coverage",
+      "label": "📊 Run Tests with Coverage",
+      "detail": "Run unit tests with terminal and HTML coverage output.",
       "type": "shell",
       "command": "uv",
       "args": [
@@ -148,7 +155,8 @@
       }
     },
     {
-      "label": "Lint (Ruff)",
+      "label": "🔎 Lint (Ruff)",
+      "detail": "Check code style, imports, and common Python issues.",
       "type": "shell",
       "command": "uv",
       "args": ["run", "ruff", "check", "src/", "tests/"],
@@ -177,7 +185,8 @@
       }
     },
     {
-      "label": "Lint & Fix (Ruff)",
+      "label": "🛠️ Lint & Fix (Ruff)",
+      "detail": "Apply safe Ruff auto-fixes where possible.",
       "type": "shell",
       "command": "uv",
       "args": ["run", "ruff", "check", "--fix", "src/", "tests/"],
@@ -195,7 +204,8 @@
       }
     },
     {
-      "label": "Type Check (Mypy)",
+      "label": "🧠 Type Check (Mypy)",
+      "detail": "Run static type checks against src/.",
       "type": "shell",
       "command": "uv",
       "args": ["run", "mypy", "src/"],
@@ -223,7 +233,8 @@
       }
     },
     {
-      "label": "Sync Dependencies",
+      "label": "📦 Sync Dependencies",
+      "detail": "Install or update locked dependencies with dev extras.",
       "type": "shell",
       "command": "uv",
       "args": ["sync", "--extra", "dev"],
@@ -237,7 +248,23 @@
       }
     },
     {
-      "label": "Build Package",
+      "label": "� Lock Dependencies",
+      "detail": "Refresh uv.lock after dependency changes.",
+      "type": "shell",
+      "command": "uv",
+      "args": ["lock"],
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true
+      }
+    },
+    {
+      "label": "�📦 Build Package",
+      "detail": "Build wheel and sdist artifacts for local verification or publishing.",
       "type": "shell",
       "command": "uv",
       "args": ["build"],
@@ -251,7 +278,8 @@
       }
     },
     {
-      "label": "Authenticate Google (ADC)",
+      "label": "🔑 Authenticate Google (ADC)",
+      "detail": "Open the Google Cloud login flow and refresh Application Default Credentials.",
       "type": "shell",
       "command": "gcloud",
       "args": ["auth", "login", "--enable-gdrive-access", "--update-adc"],
@@ -265,9 +293,10 @@
       }
     },
     {
-      "label": "Full CI Check",
+      "label": "✅ Full CI Check",
+      "detail": "Run lint, type check, and unit tests in sequence.",
       "dependsOrder": "sequence",
-      "dependsOn": ["Lint (Ruff)", "Type Check (Mypy)", "Run Unit Tests"],
+      "dependsOn": ["🔎 Lint (Ruff)", "🧠 Type Check (Mypy)", "🧪 Run Unit Tests"],
       "problemMatcher": [],
       "presentation": {
         "echo": true,
@@ -286,8 +315,8 @@
     {
       "id": "testSpreadsheetId",
       "type": "promptString",
-      "description": "Google Sheets spreadsheet ID for live integration tests",
-      "default": "your_spreadsheet_id"
+      "description": "🔑 Google Sheets spreadsheet ID for live integration tests",
+      "default": "example_test_spreadsheet_id"
     }
   ]
 }
