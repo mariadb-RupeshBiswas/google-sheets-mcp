@@ -1,11 +1,8 @@
 {
   "mcpServers": {
     "google-sheets": {
-      "command": "uv",
+      "command": "uvx",
       "args": [
-        "--directory",
-        "/absolute/path/to/google-sheets-mcp",
-        "run",
         "g-sheet-mcp"
       ]
     }

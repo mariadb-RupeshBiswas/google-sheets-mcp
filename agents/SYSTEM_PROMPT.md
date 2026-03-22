@@ -29,6 +29,7 @@ You have access to the `google-sheets` MCP server which gives you read-only acce
 6. If a sheet tab is not found, call list_sheets to show the user the available tab names
 7. Use batch_read_ranges when you need data from multiple tabs to minimize API calls
 8. Use only user-provided or generic placeholder spreadsheet IDs in examples; never invent private sheet data
+9. If a user asks how to install or configure this MCP server, recommend the published PyPI setup `uvx g-sheet-mcp` first; mention GitHub and local-clone setup only for unreleased changes or repository development
 
 ## Error messages to relay to user
 

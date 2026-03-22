@@ -45,7 +45,37 @@ brew install google-cloud-sdk
 # or: https://cloud.google.com/sdk/docs/install
 ```
 
-### Mode 1: Local clone (`uv sync`)
+### Step 1 — ✨ Recommended: Install from PyPI (`uvx g-sheet-mcp`)
+
+This is the recommended setup for most users now that the package is published on PyPI.
+
+```bash
+uvx g-sheet-mcp
+
+# Optional: pin an exact release
+uvx --from g-sheet-mcp==0.1.1 g-sheet-mcp
+
+# Optional persistent install
+pipx install g-sheet-mcp
+```
+
+Use one of the alternatives below only if you need unreleased changes or want to work on the repository itself.
+
+### Other setup options
+
+#### GitHub (`uvx --from git+...`)
+
+```bash
+uvx --from git+https://github.com/mariadb-RupeshBiswas/google-sheets-mcp g-sheet-mcp
+```
+
+#### Local path (`uvx --from /absolute/path/...`)
+
+```bash
+uvx --from /absolute/path/to/google-sheets-mcp g-sheet-mcp
+```
+
+#### Local clone (`uv sync`)
 
 ```bash
 git clone https://github.com/mariadb-RupeshBiswas/google-sheets-mcp.git
@@ -53,30 +83,7 @@ cd google-sheets-mcp
 uv sync
 ```
 
-### Mode 2: GitHub (`uvx --from git+...`)
-
-```bash
-uvx --from git+https://github.com/mariadb-RupeshBiswas/google-sheets-mcp g-sheet-mcp
-```
-
-### Mode 3: Local path (`uvx --from /absolute/path/...`)
-
-```bash
-uvx --from /absolute/path/to/google-sheets-mcp g-sheet-mcp
-```
-
-### Mode 4: PyPI (`uvx g-sheet-mcp`) — after publishing
-
-```bash
-uvx g-sheet-mcp
-
-# Optional: pin an exact release
-uvx --from g-sheet-mcp==0.1.1 g-sheet-mcp
-# Optional persistent install
-pipx install g-sheet-mcp
-```
-
-See **[docs/PUBLISHING.md](docs/PUBLISHING.md)** for PyPI publishing guide (optional).
+See **[Publishing guide](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/blob/main/docs/PUBLISHING.md)** for release details.
 
 ### Step 2 — Authenticate (once)
 
@@ -92,32 +99,35 @@ request, so you usually do not need to restart your editor.
 ### Step 3 — Run the server
 
 ```bash
-uv run g-sheet-mcp          # stdio mode (for MCP clients)
-uv run g-sheet-mcp --http   # HTTP mode → http://127.0.0.1:8000/mcp
-uv run g-sheet-mcp --debug  # verbose logging
+uvx g-sheet-mcp          # stdio mode (recommended for MCP clients)
+uvx g-sheet-mcp --http   # HTTP mode → http://127.0.0.1:8000/mcp
+uvx g-sheet-mcp --debug  # verbose logging
+
+# If you are working from a local clone instead:
+uv run g-sheet-mcp
 ```
 
 ---
 
 ## 📚 Documentation
 
-- **[Quick Start](docs/QUICKSTART.md)** — 5-minute setup
-- **[Editor Setup](docs/EDITOR_SETUP.md)** — Windsurf, Cursor, Claude Desktop, VS Code, Zed, Claude Code
-- **[Authentication](docs/AUTH.md)** — ADC setup and troubleshooting
-- **[Troubleshooting](docs/TROUBLESHOOTING.md)** — Common issues and fixes
-- **[Security](SECURITY.md)** — Security model, public-repo hygiene, and reporting policy
-- **[Publishing](docs/PUBLISHING.md)** — PyPI publishing guide (optional)
-- **[Versioning](docs/VERSIONING.md)** — PEP 440 + SemVer release policy for this project
-- **[Contributing](CONTRIBUTING.md)** — Development guide
+- **[Quick Start](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/blob/main/docs/QUICKSTART.md)** — 5-minute setup
+- **[Editor Setup](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/blob/main/docs/EDITOR_SETUP.md)** — Windsurf, Cursor, Claude Desktop, VS Code, Zed, Claude Code
+- **[Authentication](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/blob/main/docs/AUTH.md)** — ADC setup and troubleshooting
+- **[Troubleshooting](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/blob/main/docs/TROUBLESHOOTING.md)** — Common issues and fixes
+- **[Security](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/blob/main/SECURITY.md)** — Security model, public-repo hygiene, and reporting policy
+- **[Publishing](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/blob/main/docs/PUBLISHING.md)** — PyPI publishing guide (optional)
+- **[Versioning](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/blob/main/docs/VERSIONING.md)** — PEP 440 + SemVer release policy for this project
+- **[Contributing](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/blob/main/CONTRIBUTING.md)** — Development guide
 
 ---
 
 ## 🧩 Editor Integration
 
-> Full step-by-step guides → **[docs/EDITOR_SETUP.md](docs/EDITOR_SETUP.md)**
+> Full step-by-step guides → **[Editor Setup](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/blob/main/docs/EDITOR_SETUP.md)**
 
-Quick JSON snippets for each editor — replace `/absolute/path/to/google-sheets-mcp`.
-GitHub and PyPI / `uvx` variants for every editor are in **[docs/EDITOR_SETUP.md](docs/EDITOR_SETUP.md)**.
+Quick JSON snippets below use the recommended published PyPI / `uvx` setup.
+GitHub and local development variants for every editor are in **[the full editor guide](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/blob/main/docs/EDITOR_SETUP.md)**.
 
 ### Windsurf — `~/.codeium/windsurf/mcp_config.json`
 
@@ -125,8 +135,8 @@ GitHub and PyPI / `uvx` variants for every editor are in **[docs/EDITOR_SETUP.md
 {
   "mcpServers": {
     "google-sheets": {
-      "command": "uv",
-      "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
+      "command": "uvx",
+      "args": ["g-sheet-mcp"]
     }
   }
 }
@@ -138,8 +148,8 @@ GitHub and PyPI / `uvx` variants for every editor are in **[docs/EDITOR_SETUP.md
 {
   "mcpServers": {
     "google-sheets": {
-      "command": "uv",
-      "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
+      "command": "uvx",
+      "args": ["g-sheet-mcp"]
     }
   }
 }
@@ -153,8 +163,8 @@ GitHub and PyPI / `uvx` variants for every editor are in **[docs/EDITOR_SETUP.md
 {
   "mcpServers": {
     "google-sheets": {
-      "command": "uv",
-      "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
+      "command": "uvx",
+      "args": ["g-sheet-mcp"]
     }
   }
 }
@@ -167,8 +177,8 @@ GitHub and PyPI / `uvx` variants for every editor are in **[docs/EDITOR_SETUP.md
   "servers": {
     "google-sheets": {
       "type": "stdio",
-      "command": "uv",
-      "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
+      "command": "uvx",
+      "args": ["g-sheet-mcp"]
     }
   }
 }
@@ -181,8 +191,8 @@ GitHub and PyPI / `uvx` variants for every editor are in **[docs/EDITOR_SETUP.md
   "context_servers": {
     "google-sheets": {
       "command": {
-        "path": "uv",
-        "args": ["--directory", "/absolute/path/to/google-sheets-mcp", "run", "g-sheet-mcp"]
+        "path": "uvx",
+        "args": ["g-sheet-mcp"]
       }
     }
   }
@@ -193,7 +203,7 @@ GitHub and PyPI / `uvx` variants for every editor are in **[docs/EDITOR_SETUP.md
 
 ```bash
 claude mcp add --transport stdio google-sheets -- \
-  uv --directory /absolute/path/to/google-sheets-mcp run g-sheet-mcp
+  uvx g-sheet-mcp
 ```
 
 ---
@@ -320,7 +330,7 @@ gcloud auth login --enable-gdrive-access --update-adc
 The server auto-detects missing credentials and triggers the browser auth flow. If credentials
 are refreshed while the server is already running, the next request reloads the ADC file
 automatically.
-Full details → **[docs/AUTH.md](docs/AUTH.md)**
+Full details → **[Authentication guide](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/blob/main/docs/AUTH.md)**
 
 ---
 
@@ -363,10 +373,10 @@ google-sheets-mcp/
 | `RuntimeError: rate limit exceeded` | Wait 30s and retry |
 | `LookupError: Sheet '...' not found` | Call `list_sheets` first to see exact tab names |
 
-Full guide → **[docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)**
+Full guide → **[Troubleshooting guide](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/blob/main/docs/TROUBLESHOOTING.md)**
 
 ---
 
 ## 📄 License
 
-MIT — see [LICENSE](LICENSE)
+MIT — see [LICENSE](https://github.com/mariadb-RupeshBiswas/google-sheets-mcp/blob/main/LICENSE)

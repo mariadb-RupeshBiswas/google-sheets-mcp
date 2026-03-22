@@ -189,6 +189,8 @@ Agent:
 
 ## Repo maintenance note
 
-If you are modifying this repository itself rather than only using the MCP tools, follow
-`docs/VERSIONING.md` for release numbering, and keep `pyproject.toml` and
-`src/g_sheet_mcp/__init__.py` in sync when preparing a new package release.
+If you are modifying this repository itself rather than only using the MCP tools:
+- follow `docs/VERSIONING.md` for release numbering
+- keep `pyproject.toml` and `src/g_sheet_mcp/__init__.py` in sync when preparing a new package release
+- recommend the published PyPI setup `uvx g-sheet-mcp` first in user-facing setup docs and editor configuration guidance
+- mention GitHub and local-clone setup only as alternatives for unreleased changes or repository development
