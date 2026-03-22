@@ -91,6 +91,16 @@ def spreadsheet_id_from_url(url: str) -> str:
     )
 
 
+def _sheet_title_from_range(range_notation: str) -> str:
+    """Extract the sheet title from an API-returned A1 range string."""
+    if "!" not in range_notation:
+        return ""
+    prefix = range_notation.split("!", 1)[0]
+    if prefix.startswith("'") and prefix.endswith("'"):
+        return prefix[1:-1].replace("''", "'")
+    return prefix
+
+
 class SheetsClient:
     """Thin read-only wrapper around the Google Sheets API v4."""
 
@@ -196,7 +206,7 @@ class SheetsClient:
         actual_range = result.get("range", range_notation)
         values: list[list[Any]] = result.get("values", [])
 
-        sheet_title = actual_range.split("!")[0].strip("'") if "!" in actual_range else ""
+        sheet_title = _sheet_title_from_range(actual_range)
         row_count = len(values)
         col_count = max((len(r) for r in values), default=0)
 
@@ -431,7 +441,8 @@ class SheetsClient:
         for vr in result.get("valueRanges", []):
             actual_range = vr.get("range", "")
             values = vr.get("values", [])
-            sheet_title = actual_range.split("!")[0].strip("'") if "!" in actual_range else ""
+
+            sheet_title = _sheet_title_from_range(actual_range)
             output.append(
                 RangeData(
                     spreadsheet_id=spreadsheet_id,

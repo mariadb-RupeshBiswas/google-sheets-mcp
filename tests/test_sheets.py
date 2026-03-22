@@ -12,6 +12,7 @@ from g_sheet_mcp.sheets import (
     _a1,
     _col_to_letter,
     _quote_sheet,
+    _sheet_title_from_range,
     _validate_render_option,
     spreadsheet_id_from_url,
 )
@@ -236,6 +237,17 @@ class TestQuoteSheet:
 
     def test_empty_string(self):
         assert _quote_sheet("") == "''"
+
+
+class TestSheetTitleFromRange:
+    def test_unquoted_title(self):
+        assert _sheet_title_from_range("Sheet1!A1:D3") == "Sheet1"
+
+    def test_quoted_title_with_apostrophe(self):
+        assert _sheet_title_from_range("'Bob''s Data'!A1:D3") == "Bob's Data"
+
+    def test_range_without_sheet_returns_empty_string(self):
+        assert _sheet_title_from_range("A1:D3") == ""
 
 
 class TestValidateRenderOption:
