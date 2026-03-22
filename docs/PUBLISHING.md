@@ -80,9 +80,12 @@ This repo can publish without storing a PyPI token if you configure PyPI trusted
    - **Owner:** `mariadb-RupeshBiswas`
    - **Repository:** `google-sheets-mcp`
    - **Workflow:** `publish.yml`
+   - **Environment:** `pypi`
 3. Push a version tag such as `v0.1.0`
 
 The matching workflow can live at `.github/workflows/publish.yml` and publish with `uv publish --trusted-publishing=always`.
+
+If GitHub Actions fails with `invalid-publisher` or `no corresponding publisher`, the PyPI trusted publisher does not yet match these workflow claims.
 
 ---
 
