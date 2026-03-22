@@ -76,14 +76,16 @@ The server checks for credentials in this order:
 
 ## Re-authenticating
 
-ADC tokens expire after a while. To refresh:
-
+Access tokens refresh automatically during normal use. If the stored ADC refresh token is
+revoked, expires, or becomes otherwise invalid, re-run:
 ```bash
 gcloud auth login --enable-gdrive-access --update-adc
 ```
+If the MCP server is already running in your editor, retry the request after that command
+completes. The server reloads the updated ADC file on the next call, so you usually do not need
+to restart the editor.
 
-Or revoke and re-authenticate:
-
+If you want to force a completely fresh login, revoke and re-authenticate:
 ```bash
 gcloud auth revoke --all
 gcloud auth login --enable-gdrive-access --update-adc
@@ -118,5 +120,6 @@ ADC proves **who you are** but Google Sheets **share settings** still apply.
 
 - Credentials are stored only by the Google Cloud SDK — never by this server
 - The server is **read-only** by design — it requests only `*.readonly` scopes
-- Tokens are auto-refreshed at runtime; no manual token management required
+- Access tokens are auto-refreshed at runtime; if the refresh token becomes invalid, re-run `gcloud auth login --enable-gdrive-access --update-adc`
+- When the ADC file changes after re-authentication, the running server reloads it on the next request
 - You can revoke access at any time from [myaccount.google.com/permissions](https://myaccount.google.com/permissions)

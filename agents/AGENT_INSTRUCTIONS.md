@@ -150,12 +150,16 @@ simply omit trailing empty cells.
 
 | Error type | Meaning | What to tell user |
 |---|---|---|
-| `AuthError` | No ADC credentials | "Run: `gcloud auth login --enable-gdrive-access --update-adc`" |
+| `AuthError` | Missing, expired, or revoked ADC credentials | "Run: `gcloud auth login --enable-gdrive-access --update-adc`, then retry the request" |
 | `PermissionError` | No access to spreadsheet | "Make sure your Google account has Viewer access" |
 | `FileNotFoundError` | Wrong spreadsheet ID | "Check the URL — the ID may be wrong" |
 | `LookupError: Sheet not found` | Wrong tab name | Call `list_sheets` to show available tab names |
 | `ValueError: row must be >= 1` | Invalid row/column | Rows and columns are 1-based, not 0-based |
 | `RuntimeError: rate limit` | Too many requests | Wait 30 seconds and retry |
+
+If the user has just re-run `gcloud auth login --enable-gdrive-access --update-adc`, retry the
+tool call once before asking them to restart the editor. The server reloads updated ADC on the
+next request.
 
 ---
 

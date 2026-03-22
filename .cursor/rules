@@ -9,7 +9,7 @@ This is a read-only Google Sheets MCP server using FastMCP + Google Sheets API v
 - src/g_sheet_mcp/auth.py    — ADC loading + auto-auth flow
 - src/g_sheet_mcp/sheets.py  — SheetsClient (all API calls here)
 - src/g_sheet_mcp/models.py  — Pydantic response models
-- src/g_sheet_mcp/server.py  — FastMCP server, 8 tools, 1 resource
+- src/g_sheet_mcp/server.py  — FastMCP server, 8 tools, 1 resource, and ADC-aware client reload
 
 ## Rules
 - Always use `from __future__ import annotations`
@@ -29,3 +29,5 @@ get_cell, find_in_spreadsheet, batch_read_ranges, spreadsheet://{spreadsheet_id}
 ## Auth
 gcloud auth login --enable-gdrive-access --update-adc
 → ~/.config/gcloud/application_default_credentials.json
+
+If ADC is refreshed while the server is already running, retry the request once before restarting the editor — the server reloads updated ADC on the next call.

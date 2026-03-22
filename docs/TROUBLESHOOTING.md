@@ -31,9 +31,17 @@ gcloud auth login --enable-gdrive-access --update-adc
 
 ### `AuthError: Could not refresh credentials`
 
-**Cause:** No network access, or the token has been revoked.
+**Cause:** No network access, or the stored ADC refresh token has been revoked or expired.
 
 **Fix:**
+```bash
+gcloud auth login --enable-gdrive-access --update-adc
+```
+
+Then retry the MCP request. The running server reloads the updated ADC file on the next call,
+so you usually do not need to restart the editor.
+
+If you want to force a completely fresh login:
 ```bash
 gcloud auth revoke --all
 gcloud auth login --enable-gdrive-access --update-adc
@@ -119,6 +127,16 @@ Then in the editor config:
   }
 }
 ```
+
+### Re-authenticated in terminal but the editor still shows `AuthError`
+
+**Expected behavior:** After `gcloud auth login --enable-gdrive-access --update-adc`, the next MCP
+request should pick up the updated ADC automatically.
+
+**If it still fails:**
+1. Retry the same request once
+2. Confirm the editor is using the same `HOME` as your terminal
+3. Set `GOOGLE_APPLICATION_CREDENTIALS` explicitly in the editor MCP config if needed
 
 ---
 

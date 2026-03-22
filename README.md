@@ -83,7 +83,9 @@ gcloud auth login --enable-gdrive-access --update-adc
 ```
 
 This writes `~/.config/gcloud/application_default_credentials.json`.  The server picks it up
-automatically on every subsequent run — including auto-detection if it is missing.
+automatically on every subsequent run — including auto-detection if it is missing.  If you
+re-run `gcloud auth login` later, the running server reloads the updated ADC file on the next
+request, so you usually do not need to restart your editor.
 
 ### Step 3 — Run the server
 
@@ -312,7 +314,9 @@ gcloud auth login --enable-gdrive-access --update-adc
 - `spreadsheets.readonly`
 - `drive.readonly`
 
-The server auto-detects missing credentials and triggers the browser auth flow.  
+The server auto-detects missing credentials and triggers the browser auth flow. If credentials
+are refreshed while the server is already running, the next request reloads the ADC file
+automatically.
 Full details → **[docs/AUTH.md](docs/AUTH.md)**
 
 ---
@@ -349,6 +353,7 @@ google-sheets-mcp/
 | Error | Fix |
 |---|---|
 | `AuthError: No Application Default Credentials found` | Run `gcloud auth login --enable-gdrive-access --update-adc` |
+| `AuthError: Could not refresh credentials` | Re-run `gcloud auth login --enable-gdrive-access --update-adc`, then retry the request |
 | `PermissionError: Access denied` | Share the spreadsheet with your Google account (Viewer) |
 | `FileNotFoundError: Spreadsheet not found` | Check the spreadsheet ID/URL |
 | `403 insufficient permissions` | Re-run `gcloud auth login` — old ADC may lack Drive scope |

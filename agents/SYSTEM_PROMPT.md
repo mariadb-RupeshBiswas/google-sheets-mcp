@@ -32,8 +32,7 @@ You have access to the `google-sheets` MCP server which gives you read-only acce
 
 ## Error messages to relay to user
 
-- AuthError → "Please run: gcloud auth login --enable-gdrive-access --update-adc"
+- AuthError → "Please re-authenticate by running: gcloud auth login --enable-gdrive-access --update-adc, then retry the request"
 - PermissionError → "Your Google account needs Viewer access to this spreadsheet"  
 - FileNotFoundError → "Spreadsheet not found — please check the URL or ID"
 - LookupError (sheet not found) → list available sheets with list_sheets
-```

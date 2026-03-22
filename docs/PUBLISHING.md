@@ -75,16 +75,29 @@ This repo now supports publishing from the GitHub `pypi` environment using the e
 
 - `PYPI__TOKEN__`
 
-The workflow is intentionally restricted so publishing only runs from **protected `main`** via **manual `workflow_dispatch`**.
+The workflow is intentionally restricted so publishing only runs from **protected `main`**.
+It starts on pushes to `main` and manual `workflow_dispatch`, and skips cleanly when the current
+version is already fully published on PyPI.
 
 ### GitHub setup
 
 1. Create the `g-sheet-mcp` project on PyPI
 2. Add the PyPI API token as the `PYPI__TOKEN__` secret in the GitHub `pypi` environment
 3. Protect the `main` branch
-4. Run the `Publish` workflow from `main`
+4. Push the release commit to `main` or run the `Publish` workflow manually from `main`
 
-The workflow in `.github/workflows/publish.yml` builds with `uv build` and uploads with `uv publish` using the environment secret.
+The workflow in `.github/workflows/publish.yml` builds with `uv build`, checks PyPI for the
+exact built filenames, and uploads with `uv publish --check-url https://pypi.org/simple/` when
+that version is not already fully published.
+
+### What happens on every push to `main`
+
+- If the built artifacts for the current version do **not** exist on PyPI, the workflow publishes them
+- If that version is **already** fully published, the workflow logs a skip message and exits cleanly
+- If PyPI contains only part of the release, `uv publish --check-url` can resume without re-uploading identical files
+
+This means the workflow is safe to keep enabled on every protected `main` push, but **a new PyPI
+release still requires a version bump** in `pyproject.toml` and `src/g_sheet_mcp/__init__.py`.
 
 ### Optional alternative — trusted publishing
 
@@ -128,7 +141,8 @@ git tag v0.1.0
 git push origin main --tags
 ```
 
-7. Publish manually with `uv publish` or run the GitHub `Publish` workflow from protected `main`
+7. The GitHub `Publish` workflow will auto-run on protected `main`
+8. If the workflow logs that the version already exists on PyPI, bump the version and push again
 
 ---
 

@@ -407,7 +407,7 @@ curl -X POST http://127.0.0.1:8000/mcp \
 |---|---|
 | Server not listed in editor | Check the path in the config; run `which uv` to confirm uv is on PATH |
 | Green dot → red after start | Check editor developer console; run `uv run g-sheet-mcp` manually to see errors |
-| `AuthError` on first call | Run `gcloud auth login --enable-gdrive-access --update-adc` |
+| `AuthError` on first call | Run `gcloud auth login --enable-gdrive-access --update-adc`, then retry the request — restart is usually not required |
 | Works in terminal, not editor | Editor may use a different PATH — use the full path to `uv` (run `which uv`) |
 
 Full troubleshooting → [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
