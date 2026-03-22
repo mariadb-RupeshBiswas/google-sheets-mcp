@@ -1,4 +1,4 @@
-# Google Sheets MCP — Agent Instructions
+# 🤖 Google Sheets MCP — Agent Instructions
 
 This file provides instructions for LLM agents using the `google-sheets` MCP server.
 
@@ -10,10 +10,11 @@ This file provides instructions for LLM agents using the `google-sheets` MCP ser
 - **Purpose:** Read-only access to Google Sheets via the Google Sheets API v4
 - **Authentication:** Application Default Credentials (ADC) — no credentials needed from the agent
 - **Access level:** Read-only; no writes, no deletes
+- **Public examples:** Use only sanitized, generic examples unless the user provides real data explicitly
 
 ---
 
-## Available tools (8 total)
+## Available capabilities (8 tools + 1 resource)
 
 | Tool | When to use |
 |---|---|
@@ -25,6 +26,15 @@ This file provides instructions for LLM agents using the `google-sheets` MCP ser
 | `get_cell` | Read one cell by row/column number |
 | `find_in_spreadsheet` | Search for text across all or one tab |
 | `batch_read_ranges` | Fetch multiple ranges in one API call (efficient) |
+| `spreadsheet://{spreadsheet_id}/info` | Read a plain-text metadata summary when the MCP client supports templated resources |
+
+---
+
+## Resource guidance
+
+- **Resource URI template:** `spreadsheet://<spreadsheet_id>/info`
+- **Best use case:** Quick title / locale / sheet-tab summary without a full tool call sequence
+- **Fallback:** If the client does not surface templated resources, call `get_spreadsheet_info` instead
 
 ---
 
@@ -166,7 +176,7 @@ User: "Show me the first 5 rows from Sheet1"
 
 Agent:
 1. call read_sheet_as_records(
-     "https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/edit",
+     "https://docs.google.com/spreadsheets/d/EXAMPLE_SPREADSHEET_ID/edit",
      "Sheet1",
      max_rows=5
    )

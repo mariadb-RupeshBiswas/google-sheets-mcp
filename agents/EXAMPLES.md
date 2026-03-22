@@ -1,6 +1,8 @@
-# Example Interactions — Google Sheets MCP
+# 💬 Example Interactions — Google Sheets MCP
 
-Real examples of how an agent should use the google-sheets MCP tools.
+Sanitized examples of how an agent should use the google-sheets MCP tools.
+
+All spreadsheet IDs and values below are placeholders for public documentation.
 
 ---
 
@@ -34,7 +36,7 @@ records = read_sheet_as_records(
 
 ```python
 data = read_range(
-    "YOUR_SPREADSHEET_ID",
+    "EXAMPLE_SPREADSHEET_ID",
     "'Sheet2'!A1:D10"
 )
 # → values: [["id", "name", "category", "status"], ["001", "Item A", "Type1", "Active"], ...]
@@ -48,7 +50,7 @@ data = read_range(
 
 ```python
 results = find_in_spreadsheet(
-    "YOUR_SPREADSHEET_ID",
+    "EXAMPLE_SPREADSHEET_ID",
     "Complete",
     sheet_title="Sheet1",
     case_sensitive=False
@@ -65,7 +67,7 @@ results = find_in_spreadsheet(
 ```python
 # One batch call instead of multiple separate calls
 results = batch_read_ranges(
-    "YOUR_SPREADSHEET_ID",
+    "EXAMPLE_SPREADSHEET_ID",
     [
         "'Sheet1'!A1:Z1",
         "'Sheet2'!A1:Z1",
@@ -83,7 +85,7 @@ results = batch_read_ranges(
 
 ```python
 cell = get_cell(
-    "YOUR_SPREADSHEET_ID",
+    "EXAMPLE_SPREADSHEET_ID",
     "Sheet1",
     row=2,
     column=3
@@ -99,7 +101,7 @@ cell = get_cell(
 
 ```python
 cell = get_cell(
-    "YOUR_SPREADSHEET_ID",
+    "EXAMPLE_SPREADSHEET_ID",
     "Sheet1",
     row=2,
     column=5,

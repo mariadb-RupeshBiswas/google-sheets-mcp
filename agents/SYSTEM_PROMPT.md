@@ -1,4 +1,4 @@
-# System Prompt — Google Sheets MCP
+# 🤖 System Prompt — Google Sheets MCP
 
 Copy this into your LLM system prompt or agent configuration when using the `google-sheets` MCP server.
 
@@ -17,6 +17,7 @@ You have access to the `google-sheets` MCP server which gives you read-only acce
 - get_cell(spreadsheet_id_or_url, sheet_title, row, column) → single cell (1-based)
 - find_in_spreadsheet(spreadsheet_id_or_url, query, sheet_title?, case_sensitive?) → matching cells
 - batch_read_ranges(spreadsheet_id_or_url, ranges) → multiple ranges in one call
+- spreadsheet://<spreadsheet_id>/info (resource) → plain-text metadata summary when templated resources are supported
 
 ## Rules
 
@@ -27,6 +28,7 @@ You have access to the `google-sheets` MCP server which gives you read-only acce
 5. Rows and columns are 1-based (row 1 = first row, column 1 = column A)
 6. If a sheet tab is not found, call list_sheets to show the user the available tab names
 7. Use batch_read_ranges when you need data from multiple tabs to minimize API calls
+8. Use only user-provided or generic placeholder spreadsheet IDs in examples; never invent private sheet data
 
 ## Error messages to relay to user
 

@@ -9,21 +9,22 @@ This is a read-only Google Sheets MCP server using FastMCP + Google Sheets API v
 - src/g_sheet_mcp/auth.py    — ADC loading + auto-auth flow
 - src/g_sheet_mcp/sheets.py  — SheetsClient (all API calls here)
 - src/g_sheet_mcp/models.py  — Pydantic response models
-- src/g_sheet_mcp/server.py  — FastMCP server, 8 tools
+- src/g_sheet_mcp/server.py  — FastMCP server, 8 tools, 1 resource
 
 ## Rules
 - Always use `from __future__ import annotations`
 - Run scripts with `uv run`, install with `uv sync`
 - Never hardcode credentials; always use ADC
+- Keep docs/tests/examples sanitized; never commit real spreadsheet IDs, emails, or customer/internal data
 - All public methods need docstrings
 - Input validation: raise ValueError for empty strings, out-of-range ints
 - Sheet names with spaces must be wrapped with _quote_sheet() in range notation
 - Tests live in tests/; run with `uv run pytest`
-- Integration tests: `INTEGRATION=1 TEST_SPREADSHEET_ID=your_id uv run pytest tests/test_integration.py`
+- Integration tests: `INTEGRATION=1 TEST_SPREADSHEET_ID=your_test_spreadsheet_id uv run pytest tests/test_integration.py`
 
-## MCP tools (8)
+## MCP capabilities
 get_spreadsheet_info, list_sheets, read_range, read_sheet, read_sheet_as_records,
-get_cell, find_in_spreadsheet, batch_read_ranges
+get_cell, find_in_spreadsheet, batch_read_ranges, spreadsheet://{spreadsheet_id}/info
 
 ## Auth
 gcloud auth login --enable-gdrive-access --update-adc
