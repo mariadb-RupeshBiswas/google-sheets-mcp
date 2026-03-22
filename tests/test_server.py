@@ -13,11 +13,11 @@ from tests.conftest import SAMPLE_SPREADSHEET_ID, SAMPLE_SPREADSHEET_URL
 def reset_client():
     """Reset the module-level _client between tests."""
     import g_sheet_mcp.server as srv
-
     srv._client = None
+    srv._client_fingerprint = None
     yield
     srv._client = None
-
+    srv._client_fingerprint = None
 
 @pytest.fixture()
 def patched_client(sheets_client):
@@ -157,3 +157,70 @@ class TestResolveId:
         from g_sheet_mcp.server import _resolve_id
 
         assert _resolve_id(SAMPLE_SPREADSHEET_ID) == SAMPLE_SPREADSHEET_ID
+
+
+class TestGetClientCache:
+    def test_reuses_client_when_credentials_fingerprint_is_unchanged(self):
+        import g_sheet_mcp.server as srv
+
+        first_client = object()
+
+        with (
+            patch.object(srv, "credentials_fingerprint", return_value=("/tmp/adc.json", 1)),
+            patch.object(srv, "get_credentials", side_effect=[object(), object()]),
+            patch.object(srv, "SheetsClient", side_effect=[first_client]),
+        ):
+            client1 = srv._get_client()
+            client2 = srv._get_client()
+
+        assert client1 is first_client
+        assert client2 is first_client
+
+    def test_rebuilds_client_when_credentials_fingerprint_changes(self):
+        import g_sheet_mcp.server as srv
+
+        first_creds = object()
+        second_creds = object()
+        first_client = object()
+        second_client = object()
+
+        with (
+            patch.object(
+                srv,
+                "credentials_fingerprint",
+                side_effect=[("/tmp/adc.json", 1), ("/tmp/adc.json", 1), ("/tmp/adc.json", 2), ("/tmp/adc.json", 2)],
+            ),
+            patch.object(srv, "get_credentials", side_effect=[first_creds, second_creds]),
+            patch.object(srv, "SheetsClient", side_effect=[first_client, second_client]),
+        ):
+            client1 = srv._get_client()
+            client2 = srv._get_client()
+
+        assert client1 is first_client
+        assert client2 is second_client
+
+    def test_recovers_after_reauthentication_updates_adc(self):
+        import g_sheet_mcp.server as srv
+
+        recovered_creds = object()
+        recovered_client = object()
+
+        with (
+            patch.object(
+                srv,
+                "credentials_fingerprint",
+                side_effect=[("/tmp/adc.json", 1), ("/tmp/adc.json", 1), ("/tmp/adc.json", 2), ("/tmp/adc.json", 2)],
+            ),
+            patch.object(
+                srv,
+                "get_credentials",
+                side_effect=[srv.AuthError("Could not refresh credentials."), recovered_creds],
+            ),
+            patch.object(srv, "SheetsClient", side_effect=[recovered_client]),
+        ):
+            with pytest.raises(srv.AuthError, match="Could not refresh credentials"):
+                srv._get_client()
+
+            client = srv._get_client()
+
+        assert client is recovered_client

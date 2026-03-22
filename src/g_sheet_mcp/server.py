@@ -17,7 +17,7 @@ from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
-from g_sheet_mcp.auth import AuthError, get_credentials
+from g_sheet_mcp.auth import AuthError, credentials_fingerprint, get_credentials
 from g_sheet_mcp.sheets import SheetsClient, _client_lock, spreadsheet_id_from_url
 
 logging.basicConfig(
@@ -40,23 +40,27 @@ mcp = FastMCP(
 
 
 # ---------------------------------------------------------------------------
-# Shared helper – lazy-initialised once per server lifetime
+# Shared helper – lazy-initialised and reloaded when ADC changes on disk
 # ---------------------------------------------------------------------------
 
 _client: SheetsClient | None = None
+_client_fingerprint: tuple[str, int | None] | None = None
 
 
 def _get_client() -> SheetsClient:
-    global _client
-    if _client is None:
+    global _client, _client_fingerprint
+    fingerprint = credentials_fingerprint()
+    if _client is None or _client_fingerprint != fingerprint:
         with _client_lock:
-            if _client is None:  # double-checked locking
+            fingerprint = credentials_fingerprint()
+            if _client is None or _client_fingerprint != fingerprint:
                 try:
                     creds = get_credentials()
                 except AuthError as exc:
                     logger.error("Authentication failed: %s", exc)
                     raise
                 _client = SheetsClient(creds)
+                _client_fingerprint = fingerprint
     return _client
 
 

@@ -36,6 +36,15 @@ class AuthError(Exception):
     """Raised when ADC cannot be loaded or is missing required scopes."""
 
 
+def credentials_fingerprint() -> tuple[str, int | None]:
+    path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", _ADC_PATH)
+    path = os.path.expanduser(path)
+    try:
+        return path, os.stat(path).st_mtime_ns
+    except OSError:
+        return path, None
+
+
 def credentials_exist() -> bool:
     """Return True if an ADC file already exists on disk."""
     return os.path.isfile(_ADC_PATH) or bool(
@@ -138,6 +147,12 @@ def get_credentials() -> google.auth.credentials.Credentials:
     if not creds.valid:
         try:
             creds.refresh(Request())
+        except google.auth.exceptions.RefreshError as exc:
+            raise AuthError(
+                "Could not refresh credentials.\n\n"
+                "Run the following command and try again:\n\n"
+                "    gcloud auth login --enable-gdrive-access --update-adc\n"
+            ) from exc
         except google.auth.exceptions.TransportError as exc:
             raise AuthError(f"Could not refresh credentials: {exc}") from exc
 

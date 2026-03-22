@@ -6,7 +6,36 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from g_sheet_mcp.auth import AuthError, credentials_exist, ensure_authenticated, get_credentials
+from g_sheet_mcp.auth import (
+    AuthError,
+    credentials_exist,
+    credentials_fingerprint,
+    ensure_authenticated,
+    get_credentials,
+)
+
+
+class TestCredentialsFingerprint:
+    def test_uses_adc_path_mtime_when_present(self, tmp_path):
+        fake_adc = tmp_path / "application_default_credentials.json"
+        fake_adc.write_text("{}")
+        with (
+            patch("g_sheet_mcp.auth._ADC_PATH", str(fake_adc)),
+            patch.dict("os.environ", {}, clear=True),
+        ):
+            path, mtime = credentials_fingerprint()
+        assert path == str(fake_adc)
+        assert isinstance(mtime, int)
+
+    def test_uses_google_application_credentials_path(self, tmp_path):
+        fake_adc = tmp_path / "service-account.json"
+        fake_adc.write_text("{}")
+        with patch.dict(
+            "os.environ", {"GOOGLE_APPLICATION_CREDENTIALS": str(fake_adc)}, clear=True
+        ):
+            path, mtime = credentials_fingerprint()
+        assert path == str(fake_adc)
+        assert isinstance(mtime, int)
 
 
 class TestCredentialsExist:
@@ -127,5 +156,20 @@ class TestGetCredentials:
             patch("g_sheet_mcp.auth.google.auth.default", return_value=(mock_creds, "proj")),
             patch("g_sheet_mcp.auth.Request"),
             pytest.raises(AuthError, match="refresh"),
+        ):
+            get_credentials()
+
+    def test_raises_auth_error_on_generic_google_auth_failure(self):
+        import google.auth.exceptions
+
+        mock_creds = MagicMock()
+        mock_creds.valid = False
+        mock_creds.refresh.side_effect = google.auth.exceptions.RefreshError("revoked")
+
+        with (
+            self._patch_ensure(),
+            patch("g_sheet_mcp.auth.google.auth.default", return_value=(mock_creds, "proj")),
+            patch("g_sheet_mcp.auth.Request"),
+            pytest.raises(AuthError, match="gcloud auth login"),
         ):
             get_credentials()
