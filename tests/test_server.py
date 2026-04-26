@@ -13,11 +13,13 @@ from tests.conftest import SAMPLE_SPREADSHEET_ID, SAMPLE_SPREADSHEET_URL
 def reset_client():
     """Reset the module-level _client between tests."""
     import g_sheet_mcp.server as srv
+
     srv._client = None
     srv._client_fingerprint = None
     yield
     srv._client = None
     srv._client_fingerprint = None
+
 
 @pytest.fixture()
 def patched_client(sheets_client):
@@ -141,9 +143,7 @@ class TestBatchReadRangesTool:
     def test_batch_read(self, patched_client):
         from g_sheet_mcp.server import batch_read_ranges
 
-        results = batch_read_ranges(
-            SAMPLE_SPREADSHEET_URL, ["Sheet1!A1:B2", "Data!C1:C3"]
-        )
+        results = batch_read_ranges(SAMPLE_SPREADSHEET_URL, ["Sheet1!A1:B2", "Data!C1:C3"])
         assert len(results) == 2
 
 
@@ -188,7 +188,12 @@ class TestGetClientCache:
             patch.object(
                 srv,
                 "credentials_fingerprint",
-                side_effect=[("/tmp/adc.json", 1), ("/tmp/adc.json", 1), ("/tmp/adc.json", 2), ("/tmp/adc.json", 2)],
+                side_effect=[
+                    ("/tmp/adc.json", 1),
+                    ("/tmp/adc.json", 1),
+                    ("/tmp/adc.json", 2),
+                    ("/tmp/adc.json", 2),
+                ],
             ),
             patch.object(srv, "get_credentials", side_effect=[first_creds, second_creds]),
             patch.object(srv, "SheetsClient", side_effect=[first_client, second_client]),
@@ -209,7 +214,12 @@ class TestGetClientCache:
             patch.object(
                 srv,
                 "credentials_fingerprint",
-                side_effect=[("/tmp/adc.json", 1), ("/tmp/adc.json", 1), ("/tmp/adc.json", 2), ("/tmp/adc.json", 2)],
+                side_effect=[
+                    ("/tmp/adc.json", 1),
+                    ("/tmp/adc.json", 1),
+                    ("/tmp/adc.json", 2),
+                    ("/tmp/adc.json", 2),
+                ],
             ),
             patch.object(
                 srv,

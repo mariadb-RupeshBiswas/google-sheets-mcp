@@ -92,9 +92,7 @@ def mock_sheets_service():
     )
 
     # spreadsheets().values().batchGet().execute()
-    service.spreadsheets.return_value.values.return_value.batchGet.return_value.execute.return_value = (
-        FAKE_BATCH_VALUES_RESPONSE
-    )
+    service.spreadsheets.return_value.values.return_value.batchGet.return_value.execute.return_value = FAKE_BATCH_VALUES_RESPONSE
 
     return service
 
