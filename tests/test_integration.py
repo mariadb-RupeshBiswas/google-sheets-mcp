@@ -15,7 +15,9 @@ import pytest
 
 # Read spreadsheet ID from environment variable
 SAMPLE_ID = os.environ.get("TEST_SPREADSHEET_ID", "")
-SAMPLE_URL = f"https://docs.google.com/spreadsheets/d/{SAMPLE_ID}/edit?gid=0#gid=0" if SAMPLE_ID else ""
+SAMPLE_URL = (
+    f"https://docs.google.com/spreadsheets/d/{SAMPLE_ID}/edit?gid=0#gid=0" if SAMPLE_ID else ""
+)
 
 pytestmark = pytest.mark.skipif(
     os.environ.get("INTEGRATION") != "1" or not SAMPLE_ID,
@@ -45,7 +47,9 @@ def spreadsheet_info(client):
 class TestLiveMetadata:
     def test_get_info_returns_metadata(self, spreadsheet_info):
         print(f"\nTitle: {spreadsheet_info.title}")
-        print(f"Sheets ({len(spreadsheet_info.sheets)}): {[s.title for s in spreadsheet_info.sheets]}")
+        print(
+            f"Sheets ({len(spreadsheet_info.sheets)}): {[s.title for s in spreadsheet_info.sheets]}"
+        )
         assert spreadsheet_info.spreadsheet_id == SAMPLE_ID
         assert spreadsheet_info.title  # Has a title
 
@@ -147,6 +151,7 @@ class TestGetCell:
     def test_out_of_range_cell_raises_error(self, client, spreadsheet_info):
         first_sheet = spreadsheet_info.sheets[0].title
         from googleapiclient.errors import HttpError
+
         with pytest.raises(HttpError, match="exceeds grid limits"):
             client.get_cell(SAMPLE_ID, first_sheet, row=999, column=999)
 

@@ -27,9 +27,7 @@ SCOPES: list[str] = [
     "https://www.googleapis.com/auth/drive.readonly",
 ]
 
-_ADC_PATH = os.path.expanduser(
-    "~/.config/gcloud/application_default_credentials.json"
-)
+_ADC_PATH = os.path.expanduser("~/.config/gcloud/application_default_credentials.json")
 
 
 class AuthError(Exception):
@@ -47,9 +45,7 @@ def credentials_fingerprint() -> tuple[str, int | None]:
 
 def credentials_exist() -> bool:
     """Return True if an ADC file already exists on disk."""
-    return os.path.isfile(_ADC_PATH) or bool(
-        os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
-    )
+    return os.path.isfile(_ADC_PATH) or bool(os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
 
 
 def _gcloud_installed() -> bool:
@@ -110,9 +106,7 @@ def ensure_authenticated() -> None:
             "  gcloud auth login --enable-gdrive-access --update-adc\n"
         )
     print(
-        "\n" + "=" * 60 + "\n"
-        "Authentication successful!  Starting the server…\n"
-        + "=" * 60 + "\n",
+        "\n" + "=" * 60 + "\nAuthentication successful!  Starting the server…\n" + "=" * 60 + "\n",
         file=sys.stderr,
     )
 
