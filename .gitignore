@@ -85,3 +85,7 @@ logs/
 # Distribution / packaging
 *.whl
 *.tar.gz
+
+# AI session context — must not be tracked in public repo
+CLAUDE.md
+.claude/
