@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- Pin `mcp` SDK to `<2.0.0` to fix `uvx` breakage from the 2.0 release (`mcp.server.fastmcp` module removed).
+
 ### Added
 - `.github/workflows/ci.yml` — GitHub Actions checks for lint, mypy, and unit tests
 - `.github/workflows/publish.yml` — PyPI publishing workflow using `uv publish`
