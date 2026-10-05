@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Security
+- Lockfile: transitive HTTP and JWT libraries bumped to their patched releases for published security advisories. Installs from the index already resolve the patched versions.
+
 ### Fixed
 - Pin `mcp` SDK to `<2.0.0` to fix `uvx` breakage from the 2.0 release (`mcp.server.fastmcp` module removed).
 
