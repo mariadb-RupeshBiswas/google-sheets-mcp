@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Security
+- Lockfile: `urllib3` 2.7.0 to 2.8.0 and `pyjwt` 2.13.0 to 2.15.1 for GHSA-8988-9cw3-xx77, GHSA-gh4c-6fx4-qh6g, GHSA-vxq7-64xx-v4gw and the pyjwt key-confusion advisories. Both are transitive; installs from the index already resolve newer versions.
+
 ### Fixed
 - Pin `mcp` SDK to `<2.0.0` to fix `uvx` breakage from the 2.0 release (`mcp.server.fastmcp` module removed).
 
