@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Security
+- Lockfile: `mcp` SDK and the CA certificate bundle bumped to their patched releases for published security advisories.
 - Lockfile: transitive HTTP and JWT libraries bumped to their patched releases for published security advisories. Installs from the index already resolve the patched versions.
 
 ### Fixed
